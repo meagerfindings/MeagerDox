@@ -1,9 +1,5 @@
 # MeagerDox
-meagerfindings' ErgoDox layout for Mac.
-
-
-##Synopsis:
-This layout is geared toward moving as many modifier keys to the thumb clusters and often used keys to the home row, while retaining the `QWERTY` layout.
+This layout is geared toward moving as many modifier keys to the thumb clusters and often used keys to the home row, while retaining the `QWERTY` layout for Mac.
 
 ##Credit where credit is due
 The intial layout used was from the [ErgoDox EZ Configurator](https://ergodox-ez.com/pages/graphical-configurator). I went through 26+ iterations within the configurator prior to beginning my journey with QMK itself. Much of the dual function/layer keys are influenced by and adapted from the EZ Configurator.
