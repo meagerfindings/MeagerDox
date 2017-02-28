@@ -1,5 +1,4 @@
 # MeagerDox
-==========================================
 meagerfindings' ErgoDox layout for Mac.
 
 
