@@ -8,22 +8,23 @@ The intial layout used was from the [ErgoDox EZ Configurator](https://ergodox-ez
 
 Many features in this layout are either directly inspired by or adaptations of [Algernon's incredible ErgoDox layout](https://github.com/algernon/ergodox-layout). Specifically: TapDance and its usage, and the brillant idea of using TapDance to combining the four keys for parens, brackets, and curly braces into 2 keys.
 
-Diagonal MouseKeys and MouseKeys Macros were adapted from [Michael Kreene's "The Ordinary ErgoDox" Layout](https://github.com/qmk/qmk_firmware/blob/master/keyboards/ergodox/keymaps/ordinary/keymap.c).
-
-
 ##Layer 0: Base
 [![Base-layer](images/base-layer.png)](http://www.keyboard-layout-editor.com/#/gists/58a85096e0ad0f343b57ea005121b261)
+
+###Macro Keys
+* `Slack` key sends keys for spotlight search to pull up Slack.
+* `Zendesk` triggers spotlight and then calls Typinator expansion to open my Zendesk Agent dashboard in Chrome.
 
 ### Tap/Hold Macro Keys
 * `Paste/Paste Special` key sends Paste on tap and Paste Special when held.
 * `Screen/Video` key sends `||scrn` whent tapped and '||video when held'
   - [Typinator](http://www.ergonis.com/products/typinator/) expands `||scrn` into `(Screenshot: <CLIPBOARD CONTENTS>)`, and `||video` into `(Video: <CLIPBOARD CONTENTS>)`, the QMK macro then moves back to before the last paren, inserts a space and removes a space to create a hyperlink for use in Zendesk.
+* When tapped, `Todoist` toggles quick add window for a new Todoist task (`CMD + Shift + A`) and switches to Todoist when held
 
 ###TapDance Keys
 * `Copy/Cut` key copies on tap, cut's on two taps.
 * One tap on `Snagit` key = sends `Ctrl + Shift + C` which is Snagit's selector and two taps on `Snagit` key = `Cmd + Shift + Opt + 4`, OS X cropping screenshot that is copied to the clipboard only.
 * Tapping the `([{`/`}])` keys once yields `(`, tapping them twice yields `[` (or `{` when shifted).
-
 
 
 ##Layer 1: Symbols
@@ -32,7 +33,7 @@ Diagonal MouseKeys and MouseKeys Macros were adapted from [Michael Kreene's "The
 ##Layer 2: Mouse & Media Keys
 [![Mouse-layer](images/mouse-layer.png)](Layer 2: Media & Mousekeys Layer - keyboard-layout-editor.com/#/gists/e68114befd162858f8b4e7f5a2b34ee9)
 
-* Key that ironically paritally-automates sending the link to [XKCD #1319](https://xkcd.com/1319/).
+* `XKCD #1319`Key that ironically paritally-automates sending the link to [XKCD #1319](https://xkcd.com/1319/).
 
 ##Layer 3: Anki
 [![Anki-layer](images/anki-layer.png)](keyboard-layout-editor.com/#/gists/11bbe5e7df8672be282a83b41128920c)
