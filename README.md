@@ -15,7 +15,7 @@ Diagonal MouseKeys and MouseKeys Macros were adapted from [Michael Kreene's "The
 [![Base-layer](images/base-layer.png)](http://www.keyboard-layout-editor.com/#/gists/58a85096e0ad0f343b57ea005121b261)
 
 * `Screen/Video` key sends `||scrn` whent tapped and '||video when held'
-  - [Typinator](http://www.ergonis.com/products/typinator/) expands `||scrn` into `(Screenshot: <CLIPBOARD CONTENTS>)`, and `||video` into `(Video: <CLIPBOARD CONTENTS>`)`, the QMK macro then moves back to before the last paren, inserts a space and removes a space to create a hyperlink for use in Zendesk.
+  - [Typinator](http://www.ergonis.com/products/typinator/) expands `||scrn` into `(Screenshot: <CLIPBOARD CONTENTS>)`, and `||video` into `(Video: <CLIPBOARD CONTENTS>)`, the QMK macro then moves back to before the last paren, inserts a space and removes a space to create a hyperlink for use in Zendesk.
 * Tapping the `([{`/`}])` keys once yields `(`, tapping them twice yields `[` (or `{` when shifted).
 
 
