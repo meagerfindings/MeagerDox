@@ -27,7 +27,14 @@ Diagonal MouseKeys and MouseKeys Macros were adapted from [Michael Kreene's "The
 
 
 ##Layer 1: Symbols
+[![Symbol-layer](images/symbol-layer.png)](keyboard-layout-editor.com/#/gists/be9ae4b4100a41b8b942ca27a7978d68)
+
 
 ##Layer 3: Anki
+[![Anki-layer](images/anki-layer.png)](keyboard-layout-editor.com/#/gists/11bbe5e7df8672be282a83b41128920c)
+
+This layer is specifically for use with the notecard program [Anki](ankiweb.net/about).
 
 ##Layer 4: Arrow/Movements
+[![Arrow-layer](images/arrow-layer.png)](kl;kl;jk)
+
