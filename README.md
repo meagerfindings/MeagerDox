@@ -29,6 +29,10 @@ Diagonal MouseKeys and MouseKeys Macros were adapted from [Michael Kreene's "The
 ##Layer 1: Symbols
 [![Symbol-layer](images/symbol-layer.png)](keyboard-layout-editor.com/#/gists/be9ae4b4100a41b8b942ca27a7978d68)
 
+##Layer 2: Mouse & Media Keys
+[![Mouse-layer](images/mouse-layer.png)](Layer 2: Media & Mousekeys Layer - keyboard-layout-editor.com/#/gists/e68114befd162858f8b4e7f5a2b34ee9)
+
+* Key that ironically paritally-automates sending the link to [XKCD #1319](https://xkcd.com/1319/).
 
 ##Layer 3: Anki
 [![Anki-layer](images/anki-layer.png)](keyboard-layout-editor.com/#/gists/11bbe5e7df8672be282a83b41128920c)
