@@ -10,7 +10,7 @@ Diagonal MouseKeys and MouseKeys Macros were adapted from [Michael Kreene's "The
 
 
 ##Layer 0: Base
-[![Base layer](images/base-layer.png)](http://www.keyboard-layout-editor.com/#/gists/28f7eb305fdbff943613e1dc7aa9e82b)
+[![Base layer](images/base-layer.png)](http://www.keyboard-layout-editor.com/#/gists/58a85096e0ad0f343b57ea005121b261)
 
 * Tapping the `([{`/`}])` keys once yields `(`, tapping them twice yields `[` (or `{` when shifted).
 
