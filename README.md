@@ -17,7 +17,7 @@ Many features in this layout are either directly inspired by or adaptations of [
 
 ### Tap/Hold Macro Keys
 * `Paste/Paste Special` key sends Paste on tap and Paste Special when held.
-* `Screen/Video` key sends `||scrn` whent tapped and '||video when held'
+* `Screen/Video` key sends `||scrn` whent tapped and `||video` when held
   - [Typinator](http://www.ergonis.com/products/typinator/) expands `||scrn` into `(Screenshot: <CLIPBOARD CONTENTS>)`, and `||video` into `(Video: <CLIPBOARD CONTENTS>)`, the QMK macro then moves back to before the last paren, inserts a space and removes a space to create a hyperlink for use in Zendesk.
 * When tapped, `Todoist` toggles quick add window for a new Todoist task (`CMD + Shift + A`) and switches to Todoist when held
 
