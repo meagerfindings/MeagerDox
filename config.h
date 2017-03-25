@@ -59,7 +59,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define USB_MAX_POWER_CONSUMPTION 500
 
-#define TAPPING_TERM 250
+#define TAPPING_TERM 200
 
 #define MOUSEKEY_INTERVAL       20
 #define MOUSEKEY_DELAY          0
