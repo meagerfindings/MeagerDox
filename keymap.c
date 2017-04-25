@@ -234,7 +234,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /* Keymap 3: Anki Layer for adding cloze deletions, secondary cloze deletions and new cards
      * ,--------------------------------------------------.           ,--------------------------------------------------.
-     * |        |      |      |      |      |      |Sc cp |           |      |      |      |      |      |      |        |
+     * |        |      |      |      |      |      |Sc cp |           |      |      |      |      |      |      |Spdcube |
      * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
      * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
      * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
@@ -268,7 +268,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                 LGUI(LSFT(KC_C)),     LALT(LGUI(LSFT(KC_C))), _______,
 
    //right hand
-   SCRN_CLIPB,             _______,       _______,       _______,       _______,       _______,       _______,
+   SCRN_CLIPB,             _______,       _______,       _______,       _______,       _______,       TO(6),
    _______,                _______,       _______,       _______,       _______,       _______,       _______,
                            _______,       KC_1,          KC_2,          KC_3,          KC_4,          _______,
    _______,                _______,       _______,       _______,       _______,       _______,       TO(0),
@@ -295,7 +295,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     *                                 ,------|------|------|       |------+------+------.
     *                                 |      |      |      |       |      |      |      |
     *                                 |      |      |------|       |------|      |      |
-    *                                 |      |      |      |      |       |      |      |      |
+    *                                 |      |      |      |       |      |      |      |
     *                                 `--------------------'       `--------------------'
     *
     *
@@ -338,8 +338,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     *                                        ,-------------.       ,-------------.
     *                                        |      |      |       |      |      |
     *                                 ,------|------|------|       |------+------+------.
-    *                                 |      |      |      |       |      |      |      |
-    *                                 |      |      |------|       |------|      |      |
+    *                                 |      |      |      |       |      |Nupmad|      |
+    *                                 |      |      |------|       |------|Enter |      |
     *                                 |      |      |      |       |      |      |      |
     *                                 `--------------------'       `--------------------'
     */
@@ -363,7 +363,30 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                     KC_KP_0,    KC_KP_0,         KC_DOT,      DBL_0,       KC_KP_ENTER,
       _______,      _______,
       _______,
-      _______,      _______,      _______),
+      _______,      KC_PENT,      _______),
+
+      [6] = KEYMAP(
+        /* "Speed cube layer" Everything is a spaaaaaace bar for use with https://cstimer.net/ */
+
+        //left hand
+        TO(0),           KC_SPACE,           KC_SPACE,           KC_SPACE,        KC_SPACE,        KC_SPACE,    KC_SPACE,
+        KC_SPACE,        KC_SPACE,           KC_SPACE,           KC_SPACE,        KC_SPACE,        KC_SPACE,    KC_SPACE,
+        KC_SPACE,        KC_SPACE,           KC_SPACE,           KC_SPACE,        KC_SPACE,        KC_SPACE,
+        KC_SPACE,        KC_SPACE,           KC_SPACE,           KC_SPACE,        KC_SPACE,        KC_SPACE,    KC_SPACE,
+                         KC_SPACE,           KC_SPACE,           KC_SPACE,        KC_SPACE,        KC_SPACE,
+                                                                                                   KC_SPACE,    KC_SPACE,
+                                                                                                                KC_SPACE,
+                                                                                  KC_SPACE,        KC_SPACE,    KC_SPACE,
+
+        //right hand
+        KC_SPACE,      KC_SPACE,      KC_SPACE,          KC_SPACE,        KC_SPACE,        KC_SPACE,        TO(0),
+        KC_SPACE,      KC_SPACE,      KC_SPACE,          KC_SPACE,        KC_SPACE,        KC_SPACE,        KC_SPACE,
+                       KC_SPACE,      KC_SPACE,          KC_SPACE,        KC_SPACE,        KC_SPACE,        KC_SPACE,
+        KC_SPACE,      KC_SPACE,      KC_SPACE,          KC_SPACE,        KC_SPACE,        KC_SPACE,        KC_SPACE,
+                       KC_SPACE,      KC_SPACE,          KC_SPACE,        KC_SPACE,        KC_SPACE,
+        KC_SPACE,      KC_SPACE,
+        KC_SPACE,
+        KC_SPACE,      KC_SPACE,      KC_SPACE),
 
 };
 
