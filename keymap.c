@@ -109,7 +109,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   * |--------+------+------+------+------+------|  (   |           |  )   |------+------+------+------+------+--------|
   * |Layer 1 |Z/Ctrl|X/Alt |   C  |   V  |   B  | [ {  |           | ] }  |   N  |   M  |   ,  | ./Alt|//Ctrl|Layer 2 |
   * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-  *   |  `   |Zendsk| ATOM |CMD+S | ToDo |                                       |      |      |      |      |OS3/L3|
+  *   |  `   |Zendsk| ATOM |CMD+S | ToDo |                                       |Z:Code|Z:Quot|      |      |OS3/L3|
   *   `----------------------------------'                                       `----------------------------------'
   *                                        ,-------------.       ,--------------.
   *                                        | Esc  | Home |       |Layer?| Esc   |
@@ -142,7 +142,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     SCRN_VIDEO,        KC_Y,     KC_U,     KC_I,     KC_O,          KC_P,             KC_BSLASH,
                        KC_H,     KC_J,     KC_K,     LGUI_T(KC_L),  LT(2,KC_SCOLON),  ALL_T(KC_QUOTE),
     TD(CT_RBP),        KC_N,     KC_M,     KC_COMMA, ALT_T(KC_DOT), CTL_T(KC_SLASH),  TO(2),
-                    _______,  _______,      _______, _______,       TD(TD_OSL3),
+                       LGUI(LSFT(KC_5)),  LGUI(LSFT(KC_9)),      _______, _______,    TD(TD_OSL3),
     L_ID_0,         KC_ESCAPE,
     LGUI(KC_Z),
     OSM(MOD_LGUI),   LT(1,KC_ENTER),  LT(4,KC_SPACE)),
