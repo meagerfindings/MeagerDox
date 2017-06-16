@@ -31,7 +31,7 @@ Many features in this layout are either directly inspired by or adaptations of [
 [![Symbol-layer](images/symbol-layer.png)](keyboard-layout-editor.com/#/gists/be9ae4b4100a41b8b942ca27a7978d68)
 
 ## Layer 2: Mouse & Media Keys
-[![Mouse-layer](images/mouse-layer.png)](Layer 2: Media & Mousekeys Layer - keyboard-layout-editor.com/#/gists/e68114befd162858f8b4e7f5a2b34ee9)
+[![Mouse-layer](images/mouse-layer.png)](http://www.keyboard-layout-editor.com/#/gists/e68114befd162858f8b4e7f5a2b34ee9)
 
 * `XKCD #1319`Key that ironically paritally-automates sending the link to [XKCD #1319](https://xkcd.com/1319/).
 
