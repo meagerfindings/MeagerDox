@@ -1,6 +1,10 @@
-#include "ergodox.h"
+#include QMK_KEYBOARD_H
 #include "debug.h"
 #include "action_layer.h"
+#include "action_util.h"
+#include "timer.h"
+#include "eeconfig.h"
+#include "wait.h"
 #include "version.h"
 
 enum custom_keycodes {
@@ -9,15 +13,13 @@ enum custom_keycodes {
   VRSN,
   TD_COPY_CUT = 6,
   TD_SNAGIT = 8,
-  TD_EXCl_AT = 9,
   TD_B_L_SEL = 10,
   CT_LBP = 11,
   CT_RBP = 12,
   TD_OSL3 = 13,
 };
 
-//Redifne Key Names for readaibilty
-#define _______ KC_TRANSPARENT
+//Redefine Key Names for Readaibilty
 #define XXXXXXX KC_NO
 #define SCRN_CLIPB LCTL(LGUI(LSFT(KC_4)))
 #define CHRM_L LALT(LGUI(KC_LEFT)) //Move left one tab in Chrome
@@ -29,20 +31,11 @@ enum custom_keycodes {
 #define L_ID_1 M(4) //Prints layer identifier text for layer 1
 #define L_ID_2 M(5) //Prints layer identifier text for layer 2
 #define L_ID_3 M(6) //Prints layer identifier text for layer 3
-#define WBR M(7) //Typinator signature abbreviation
-#define DNS M(8) //Typinator abbreviation to set PiHole DNS when tapped, when held, Typinator abbreviation to set Google DNS
-#define CLR_DNS M(9) //Typinator abbreviation to clear OS X dns when tapped, when held, Typinator abbreviation for ssh into rPI
 #define XKCD_AUTO M(10) //Sends string "https://xkcd.com/1319/"
-#define SCRN_VIDEO M(11) //When tapped:Typinator screenshot abbreviation. Result = "(Screenshot: <clilpboard>)" When held: //Typinator screenshot abbreviation. Result = "(Screenshot: <clilpboard>)"
 #define PAST_PS M(12) // Tap = CMD + V , Held = CMD + Shift + V
-#define SLACK M(13) //Opens Slack on a mac
 #define TODO M(14) //Macro to initiate new Todoist task window on tap and switch to Todoist when held
 #define ATOM M(15) //Opens Atom
 #define ZENDESK M(16) //Macro opens Chrome and navigates to my Zendesk Agent dashboard. Calls spotlight and then triggers Typinator expansion.
-#define PUSHBUL M(17)
-#define S_SAVE M(18) //Macro to send S on tap and Save on Hold
-#define A_ALL M(19) //Macro to send A on tap and CMD + A on Hold
-#define TYFW M(20) //Macro for Typinator expansion of TYFW
 
 static uint16_t key_timer; //key timer for macros
 
@@ -88,8 +81,6 @@ qk_tap_dance_action_t tap_dance_actions[] = {
   [TD_COPY_CUT]  = ACTION_TAP_DANCE_DOUBLE(LGUI(KC_C),LGUI(KC_X)),
     //Tap once for Snagit, twice for Cmd + Shift + Opt + 4 (OS X cropping screenshot that is copied to the clipboard only.)
   [TD_SNAGIT] = ACTION_TAP_DANCE_DOUBLE(LCTL(LSFT(KC_C)), LCTL(LGUI(LSFT(KC_4)))),
-    //Need to make this one execute macros to do this instead?
-  [TD_EXCl_AT] = ACTION_TAP_DANCE_DOUBLE(KC_EXLM, KC_AT),
   [TD_B_L_SEL] = ACTION_TAP_DANCE_FN(td_base_layer_selector),
   [CT_LBP] = ACTION_TAP_DANCE_DOUBLE (KC_LPRN, KC_LBRC),
   [CT_RBP] = ACTION_TAP_DANCE_DOUBLE (KC_RPRN, KC_RBRC),
@@ -103,8 +94,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   * ,--------------------------------------------------.           ,--------------------------------------------------.
   * |   =    |   1  |   2  |   3  |   4  |   5  | Paste|           |Snagit|   6  |   7  |   8  |   9  |   0  |   -    |
   * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-  * | Tab    |   Q  |   W  |   E  |   R  |   T  | Copy |           | SCRN/|   Y  |   U  |   I  |   O  |   P  |   \    |
-  * |--------+------+------+------+------+------| /Cut |           | VIDEO|------+------+------+------+------+--------|
+  * | Tab    |   Q  |   W  |   E  |   R  |   T  | Copy |           |      |   Y  |   U  |   I  |   O  |   P  |   \    |
+  * |--------+------+------+------+------+------| /Cut |           |      |------+------+------+------+------+--------|
   * | Hyper  |   A  |S /CMD|   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |L /CMD| ; /L2|' /Hyper|
   * |--------+------+------+------+------+------|  (   |           |  )   |------+------+------+------+------+--------|
   * |Layer 1 |Z/Ctrl|X/Alt |   C  |   V  |   B  | [ {  |           | ] }  |   N  |   M  |   ,  | ./Alt|//Ctrl|Layer 2 |
@@ -119,12 +110,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   *                                 | OSM  | /L5  | DEL  |       | CMD  | /LT1  |Arrows|
   *                                 `--------------------'       `---------------------'
   *
-  *Copy/ cut key copies on tap, cut's on two taps.
+  *Copy/Cut key copies on tap, cut's on two taps.
   *
   *One tap on Snagit key = is Ctrl + Shift + C which is Snagit's selector.
   *Two taps on Snagit key = Cmd + Shift + Opt + 4 (OS X cropping screenshot that is copied to the clipboard only.)
   */
-
 
   [0] = KEYMAP(
     //left hand
@@ -138,8 +128,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                       OSM(MOD_LSFT), LT(5,KC_BSPACE),  KC_DELETE,
 
     //right hand
-    TD(TD_SNAGIT),     KC_6,     KC_7,     KC_8,     KC_9,          KC_0,             KC_MINUS,
-    SCRN_VIDEO,        KC_Y,     KC_U,     KC_I,     KC_O,          KC_P,             KC_BSLASH,
+    TD(TD_SNAGIT),     KC_6,     KC_7,     KC_8,     KC_9,          KC_0,       KC_MINUS,
+    _______,     KC_Y,     KC_U,     KC_I,     KC_O,          KC_P,       KC_BSLASH,
                        KC_H,     KC_J,     KC_K,     LGUI_T(KC_L),  LT(2,KC_SCOLON),  ALL_T(KC_QUOTE),
     TD(CT_RBP),        KC_N,     KC_M,     KC_COMMA, ALT_T(KC_DOT), CTL_T(KC_SLASH),  TO(2),
                        LGUI(LSFT(KC_5)),  LGUI(LSFT(KC_9)),      _______, _______,    TD(TD_OSL3),
@@ -151,11 +141,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * ,--------------------------------------------------.           ,--------------------------------------------------.
      * |        |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |           |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |        |
      * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-     * |        |      |      |   &  |   `  |   |  | Cmd  |           |      |      |      |      |      |      |        |
+     * |        |      |   $  |   &  |   !  |   |  | Cmd  |           |      |      |      |      |      |      |        |
      * |--------+------+------+------+------+------| + K  |           |      |------+------+------+------+------+--------|
-     * |Shft Tab|   #  |   $  |   !  |   '  |   @  |------|           |------|   *  |      |      |      |      |        |
+     * |Shft Tab|   #  |   _  |   *  |   `  |   @  |------|           |------|   -  |   [  |   ]  |   (  |   )  |        |
      * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
-     * |Layer 0 |   %  |   ^  |   [  |   ]  |   ~  |      |           |      |      |      |      |      |      |Layer 2 |
+     * |Layer 0 |   %  |   ^  |      |      |   ~  |      |           |      |      |      |      |      |      |Layer 2 |
      * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
      *   |      |      |      |      |      |                                       |      |      |      |      |      |
      *   `----------------------------------'                                       `----------------------------------'
@@ -167,27 +157,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *                                 |      |      |      |       |      |      |      |
      *                                 `--------------------'       `--------------------'
      */
-    // SYMBOLS & Numpad
+    // SYMBOLS
   [1] = KEYMAP(
     //left hand
-    _______,          KC_F1,             KC_F2,             KC_F3,          KC_F4,          KC_F5,      KC_F6,
-    _______,        _______,           _______,           KC_AMPR,        KC_GRAVE,       KC_PIPE,    LGUI(KC_K),
-    LSFT(KC_TAB),   KC_HASH,           KC_DLR,            KC_EXLM,        KC_QUOTE,       KC_AT,
-    TO(0),          KC_PERC,           KC_CIRC,           KC_LBRC,        KC_RBRC,        KC_TILD,    _______,
-                       _______,          _______,           _______,        _______,        _______,
-                                                                                            _______,   _______,
-                                                                                                       _______,
-                                                                            _______,        _______,   _______,
+    _______,          KC_F1,       KC_F2,       KC_F3,       KC_F4,        KC_F5,      KC_F6,
+    _______,        _______,     KC_DLR,        KC_AMPR,     KC_EXLM,        KC_PIPE,    LGUI(KC_K),
+    LSFT(KC_TAB),   KC_HASH,  LSFT(KC_MINUS),   KC_ASTR,     KC_GRAVE,       KC_AT,
+    TO(0),          KC_PERC,     KC_CIRC,       _______,     _______,        KC_TILD,    _______,
+                    _______,     _______,       _______,     _______,        _______,
+                                                                                          _______,    _______,
+                                                                                                      _______,
+                                                                          _______,        _______,    _______,
 
     //right hand
       KC_F7,        KC_F8,       KC_F9,       KC_F10,       KC_F11,      KC_F12,    KC_MINUS,
     _______,      _______,     _______,      _______,      _______,     _______,    _______,
-                  KC_ASTR,     _______,      _______,      _______,     _______,    _______,
+                  KC_MINUS,    KC_LBRC,      KC_RBRC,      KC_LPRN,     KC_RPRN,    _______,
     _______,      _______,     _______,      _______,      _______,     _______,    TO(2),
                   _______,     _______,      _______,      _______,     _______,
     L_ID_1,       _______,
     _______,
-    _______,      _______,      _______),
+    _______,      _______,     _______),
 
   /* Keymap 2: Media and mouse keys
    * ,--------------------------------------------------.           ,--------------------------------------------------.
@@ -223,12 +213,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                    KC_MS_BTN1,      KC_MS_BTN2,      _______,
 
     //right hand
-    XKCD_AUTO,  _______,       _______,               _______,               _______,    _______,    KC_F15,
-    _______,    _______,       _______,               _______,               _______,    _______,    KC_F14,
+    XKCD_AUTO,  _______,       _______,         _______,         _______,    _______,    KC_F15,
+    _______,    _______,       _______,         _______,         _______,    _______,    KC_F14,
                 _______, KC_AUDIO_MUTE,     KC_AUDIO_VOL_DOWN,       KC_AUDIO_VOL_UP,    _______,    KC_MEDIA_PLAY_PAUSE,
    _______,     _______,       _______,   KC_MEDIA_PREV_TRACK,   KC_MEDIA_NEXT_TRACK,    _______,    TO(0),
-                               _______,               _______,               _______,    _______,    _______,
-    L_ID_2,           _______,
+                               _______,         _______,         _______,    _______,    _______,
+    L_ID_2,     _______,
     _______,
     _______,    TD(TD_COPY_CUT),    PAST_PS),
 
@@ -268,19 +258,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                 LGUI(LSFT(KC_C)),     LALT(LGUI(LSFT(KC_C))), _______,
 
    //right hand
-   SCRN_CLIPB,             _______,       _______,       _______,       _______,       _______,       TO(6),
-   _______,                _______,       _______,       _______,       _______,       _______,       _______,
+   SCRN_CLIPB,       _______,       _______,       _______,       _______,       _______,       _______,
+   _______,          _______,       _______,       _______,       _______,       _______,       _______,
                            _______,       KC_1,          KC_2,          KC_3,          KC_4,          _______,
-   _______,                _______,       _______,       _______,       _______,       _______,       TO(0),
+   _______,          _______,       _______,       _______,       _______,       _______,       TO(0),
                            _______,       _______,       _______,       _______,       TO(0),
-   L_ID_3,                _______,
+   L_ID_3,          _______,
    _______,
-   _______,               LGUI(KC_ENTER),       _______),
+   _______,         LGUI(KC_ENTER),       _______),
 
    /* Keymap 4: Arrows
     *
     * ,--------------------------------------------------.           ,--------------------------------------------------.
-    * |  RESET |      |      |      |      |  DNS |clrDNS|           |      |      |      |      |      |      |        |
+    * |  RESET |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
     * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
     * |        |      | Opt+L|  Up  |Opt+R |      |      |           |      |      |      |  Up  |      |      |        |
     * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
@@ -305,8 +295,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [4] = KEYMAP(
   //left hand
-    RESET,       _______,       _______,       _______,        _______,         DNS,           CLR_DNS,
-    _______,     _______,        CHRM_L,       KC_UP,           CHRM_R,         _______,       _______,
+    RESET,       _______,       _______,       _______,        _______,         _______,       _______,
+    _______,     _______,        CHRM_L,       KC_UP,     CHRM_R,         _______,       _______,
     _______,LCTL(KC_LEFT),      KC_LEFT,       KC_DOWN,       KC_RIGHT,    LCTL(KC_RIGHT),
     TO(0),       _______,       _______,       _______,        _______,         _______,       _______,
                  _______,       _______,       _______,        _______,         _______,
@@ -327,13 +317,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     * ,--------------------------------------------------.           ,--------------------------------------------------.
     * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
     * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-    * |        |TYFW  | MFKS | WBR  |  FR  |      |      |           |      |   =  |   7  |   8  |   9  |   *  |        |
+    * |        |      |      |      |      |      |      |           |      |   =  |   7  |   8  |   9  |   *  |        |
     * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
     * |        |      |      |Cp/Cut|paste |      |------|           |------|   +  |   4  |   5  |   6  |   +  |        |
     * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
     * |        |      |      |      |      |      |      |           |      |   -  |   1  |   2  |   3  |   /  |        |
     * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-    *   |      |      |      |      |      |                                       |   0  |  0   |   .  |  00  | Enter|
+    *   |      |      |      |      |      |                                       |   0  |   .  |  00  |  00  | Enter|
     *   `----------------------------------'                                       `----------------------------------'
     *                                        ,-------------.       ,-------------.
     *                                        |      |      |       |      |      |
@@ -346,11 +336,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // Numpad  Layer
     [5] = KEYMAP(
       //left hand
-      _______,        _______,           _______,           _______,        _______,        _______,    _______,
-      _______,        TYFW,              _______,           _______,        _______,        _______,    _______,
-      _______,        _______,           _______,   TD(TD_COPY_CUT),        PAST_PS,        _______,
-      _______,        _______,           _______,           _______,        _______,        _______,    _______,
-                      _______,           _______,           _______,        _______,        _______,
+      _______,        _______,     _______,     _______,        _______,        _______,    _______,
+      _______,        _______,     _______,     _______,        _______,        _______,    _______,
+      _______,        _______,     _______,   TD(TD_COPY_CUT),        PAST_PS,        _______,
+      _______,        _______,     _______,     _______,        _______,        _______,    _______,
+                      _______,     _______,     _______,        _______,        _______,
                                                                                             _______,    _______,
                                                                                                         _______,
                                                                             _______,        _______,    _______,
@@ -360,33 +350,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       _______,     KC_EQUAL,      KC_7,          KC_8,        KC_9,        KC_ASTR,        _______,
                     KC_PLUS,      KC_4,          KC_5,        KC_6,        KC_PLUS,        _______,
       _______,     KC_MINUS,      KC_1,          KC_2,        KC_3,        KC_KP_SLASH,    _______,
-                    KC_KP_0,    KC_KP_0,         KC_DOT,      DBL_0,       KC_KP_ENTER,
+                    KC_KP_0,      KC_DOT,        DBL_0,       DBL_0,       KC_KP_ENTER,
       _______,      _______,
       _______,
       _______,      KC_PENT,      _______),
-
-      [6] = KEYMAP(
-        /* "Speed cube layer" Everything is a spaaaaaace bar for use with https://cstimer.net/ */
-
-        //left hand
-        TO(0),           KC_SPACE,           KC_SPACE,           KC_SPACE,        KC_SPACE,        KC_SPACE,    KC_SPACE,
-        KC_SPACE,        KC_SPACE,           KC_SPACE,           KC_SPACE,        KC_SPACE,        KC_SPACE,    KC_SPACE,
-        KC_SPACE,        KC_SPACE,           KC_SPACE,           KC_SPACE,        KC_SPACE,        KC_SPACE,
-        KC_SPACE,        KC_SPACE,           KC_SPACE,           KC_SPACE,        KC_SPACE,        KC_SPACE,    KC_SPACE,
-                         KC_SPACE,           KC_SPACE,           KC_SPACE,        KC_SPACE,        KC_SPACE,
-                                                                                                   KC_SPACE,    KC_SPACE,
-                                                                                                                KC_SPACE,
-                                                                                  KC_SPACE,        KC_SPACE,    KC_SPACE,
-
-        //right hand
-        KC_SPACE,      KC_SPACE,      KC_SPACE,          KC_SPACE,        KC_SPACE,        KC_SPACE,        TO(0),
-        KC_SPACE,      KC_SPACE,      KC_SPACE,          KC_SPACE,        KC_SPACE,        KC_SPACE,        KC_SPACE,
-                       KC_SPACE,      KC_SPACE,          KC_SPACE,        KC_SPACE,        KC_SPACE,        KC_SPACE,
-        KC_SPACE,      KC_SPACE,      KC_SPACE,          KC_SPACE,        KC_SPACE,        KC_SPACE,        KC_SPACE,
-                       KC_SPACE,      KC_SPACE,          KC_SPACE,        KC_SPACE,        KC_SPACE,
-        KC_SPACE,      KC_SPACE,
-        KC_SPACE,
-        KC_SPACE,      KC_SPACE,      KC_SPACE),
 
 };
 
@@ -431,56 +398,11 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
               /*SEND_STRING ("Layer 3: Anki Layer - keyboard-layout-editor.com/#/gists/11bbe5e7df8672be282a83b41128920c");*/
             }
             break;
-        case 7:
-            if (record->event.pressed) {
-            return MACRO( T(W), T(B), T(R), T(BSPACE), END  ); //this sends "WBR" - Typinator expands this to be my signature
-          }
-            break;
-        case 8:
-            if (record->event.pressed) {
-                    key_timer = timer_read(); // if the key is being pressed, we start the timer.
-            }
-            else { // this means the key was just released, so we can figure out how long it was pressed for (tap or "held down").
-                 if (timer_elapsed(key_timer) > 150) { // 150 being 150ms, the threshhold we pick for counting something as a tap.
-                   return MACRO( D(LGUI), T(SPACE), U(LGUI), T(T), T(E), T(R), T(M),  T(ENTER),  T(S), T(E), T(T), T(G), T(O), T(O), T(G), T(L), T(E), T(D), T(N), T(S), END);
-                 }
-                 else {
-                   return MACRO( D(LGUI), T(SPACE), U(LGUI), T(T), T(E), T(R), T(M),  T(ENTER),  T(S), T(E), T(T), T(H), T(O), T(M), T(E), T(D), T(N), T(S), END);
-                 }
-            }
-            break;
-        case 9:
-            if (record->event.pressed) {
-                    key_timer = timer_read();
-            }
-            else {
-                 if (timer_elapsed(key_timer) > 150) {
-                   return MACRO( D(LGUI), T(SPACE), U(LGUI), T(T), T(E), T(R), T(M),  T(ENTER),  T(C), T(L), T(E), T(A), T(R), T(D), T(N), T(S), END);
-                 }
-                 else {
-                   return MACRO( D(LGUI), T(SPACE), U(LGUI), T(T), T(E), T(R), T(M),  T(ENTER),  D(LSFT), T(BSLASH), T(BSLASH), U(LSFT), T(S), T(S), T(H), END);
-                 }
-            }
-            break;
         case 10:
             if (record->event.pressed) {
             SEND_STRING ("https://xkcd.com/1319/");
           }
             break;
-        case 11:
-            if (record->event.pressed) {
-                    key_timer = timer_read();
-            }
-            else {
-                 if (timer_elapsed(key_timer) > 150) {
-                   return MACRO( D(LSFT), T(BSLASH), T(BSLASH), U(LSFT), T(V), T(I), T(D), T(E), T(O), END);
-                 }
-                 else {
-                   return MACRO( D(LSFT), T(BSLASH), T(BSLASH), U(LSFT), T(S), T(C), T(R), T(N), END);
-                 }
-        }
-           break;
-
         case 12:
             if (record->event.pressed) {
                     key_timer = timer_read();
@@ -490,15 +412,10 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
                    return MACRO( D(LGUI), D(LSFT), T(V), U(LSFT), U(LGUI),  END);
                  }
                  else {
-                  return MACRO( D(LGUI), T(V), U(LGUI),  END);                 }
-        }
+                  return MACRO( D(LGUI), T(V), U(LGUI),  END);
+                 }
+               }
            break;
-
-        case 13:
-            if (record->event.pressed){
-              return MACRO( D(LGUI), T(SPACE), U(LGUI), T(S), T(L), T(A), T(C), T(K), T(ENTER), END);
-            }
-            break;
         case 14:
             if (record->event.pressed) {
                     key_timer = timer_read();
@@ -522,42 +439,7 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
               return MACRO( D(LGUI), T(SPACE), U(LGUI), D(LSFT), T(BSLASH), T(BSLASH), U(LSFT), T(Z), T(E), T(N), END);
             }
             break;
-        case 17:
-            if (record->event.pressed){
-              return MACRO( D(LGUI), T(SPACE), U(LGUI), D(LSFT), T(BSLASH), T(BSLASH), U(LSFT), T(P), T(B), T(U), END);
-            }
-            break;
-
-        case 18:
-            if (record->event.pressed) {
-                    key_timer = timer_read();
-            }
-            else {
-                 if (timer_elapsed(key_timer) > 200) {
-                   return MACRO( D(LGUI), T(S), U(LGUI), END);
-                 }
-                 else {
-                   return MACRO(  I(0), T(S), END);
-                 }
         }
-        case 19:
-            if (record->event.pressed) {
-                    key_timer = timer_read();
-            }
-            else {
-                 if (timer_elapsed(key_timer) > 200) {
-                   return MACRO( D(LGUI), T(A), U(LGUI), END);
-                 }
-                 else {
-                   return MACRO( I(0), T(A), END);
-                 }
-        }
-    case 20:
-            if (record->event.pressed) {
-            return MACRO( T(T), T(Y), T(F), T(W), T(SPACE), END);
-          }
-        break;
-    }
     return MACRO_NONE;
 };
 
