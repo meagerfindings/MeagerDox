@@ -1,22 +1,47 @@
-#include QMK_KEYBOARD_H
+  #include QMK_KEYBOARD_H
 #include "debug.h"
 #include "action_layer.h"
-#include "action_util.h"
 #include "timer.h"
-#include "eeconfig.h"
-#include "wait.h"
 #include "version.h"
+
+enum {
+  BASE = 0,
+  OLD_BASE,
+  SYMBL,
+  MEDIA,
+  MKDWN,
+  ARROWS,
+  NUM,
+};
 
 enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
   EPRM,
   VRSN,
+  MD_LINK,
+  XKCD,
+  DBLE_ZER0,
+  L_ID_0,
+  L_ID_1,
+  L_ID_2,
+  PAST_PS,
+  TODO,
+  RUBYMINE,
+  ZENDESK,
+  DBLE_ASTR,
+  TRPLE_GRAVE,
+  H_ONE,
+  H_TWO,
+  H_THREE,
+  H_FOUR,
+  H_FIVE,
+  M_LINK,
+  M_GREATER,
   TD_COPY_CUT = 6,
   TD_SNAGIT = 8,
   TD_B_L_SEL = 10,
   CT_LBP = 11,
-  CT_RBP = 12,
-  TD_OSL3 = 13,
+  CT_RBP = 12
 };
 
 //Redefine Key Names for Readaibilty
@@ -24,56 +49,10 @@ enum custom_keycodes {
 #define SCRN_CLIPB LCTL(LGUI(LSFT(KC_4)))
 #define CHRM_L LALT(LGUI(KC_LEFT)) //Move left one tab in Chrome
 #define CHRM_R LALT(LGUI(KC_RIGHT)) //Move right one tab in Chrome
-
-//Macro Names
-#define DBL_0 M(2) //Types two numpad zeroes
-#define L_ID_0 M(3) //Prints layer identifier text for layer 0
-#define L_ID_1 M(4) //Prints layer identifier text for layer 1
-#define L_ID_2 M(5) //Prints layer identifier text for layer 2
-#define L_ID_3 M(6) //Prints layer identifier text for layer 3
-#define XKCD_AUTO M(10) //Sends string "https://xkcd.com/1319/"
-#define PAST_PS M(12) // Tap = CMD + V , Held = CMD + Shift + V
-#define TODO M(14) //Macro to initiate new Todoist task window on tap and switch to Todoist when held
-#define ATOM M(15) //Opens Atom
-#define ZENDESK M(16) //Macro opens Chrome and navigates to my Zendesk Agent dashboard. Calls spotlight and then triggers Typinator expansion.
+#define S_CMD_S LGUI_T(KC_S) //`S` when typing `CMD` when held
+#define D_CMD_OPT LGUI_T(LALT_T(KC_D)) //`D` when typing `CMD + Opt` when held
 
 static uint16_t key_timer; //key timer for macros
-
-void td_osl3_tol3(qk_tap_dance_state_t *state, void *user_data) {
-  switch (state->count) {
-  case 1:
-     set_oneshot_layer(3, ONESHOT_START);
-     clear_oneshot_layer_state (ONESHOT_PRESSED);
-     break;
-  case 2:
-     layer_on(3);
-     break;
-  case 3:
-   layer_on(0);
-   break;
-  }
-}
-
-void td_base_layer_selector(qk_tap_dance_state_t *state, void *user_data) {
-  switch (state->count) {
-  case 1:
-     layer_on(1);
-     break;
-  case 2:
-     layer_on(2);
-     break;
-  case 3:
-     layer_on(3);
-     break;
-  case 4:
-     layer_on(4);
-     break;
-  case 5:
-     layer_on(0);
-     break;
-  }
-}
-
 
 //Tap Dance Definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
@@ -81,33 +60,30 @@ qk_tap_dance_action_t tap_dance_actions[] = {
   [TD_COPY_CUT]  = ACTION_TAP_DANCE_DOUBLE(LGUI(KC_C),LGUI(KC_X)),
     //Tap once for Snagit, twice for Cmd + Shift + Opt + 4 (OS X cropping screenshot that is copied to the clipboard only.)
   [TD_SNAGIT] = ACTION_TAP_DANCE_DOUBLE(LCTL(LSFT(KC_C)), LCTL(LGUI(LSFT(KC_4)))),
-  [TD_B_L_SEL] = ACTION_TAP_DANCE_FN(td_base_layer_selector),
-  [CT_LBP] = ACTION_TAP_DANCE_DOUBLE (KC_LPRN, KC_LBRC),
-  [CT_RBP] = ACTION_TAP_DANCE_DOUBLE (KC_RPRN, KC_RBRC),
-  [TD_OSL3] = ACTION_TAP_DANCE_FN (td_osl3_tol3),
+  [CT_LBP] = ACTION_TAP_DANCE_DOUBLE (KC_LBRC, KC_LPRN),
+  [CT_RBP] = ACTION_TAP_DANCE_DOUBLE (KC_RBRC, KC_RPRN)
 };
-
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   /* Keymap 0: Basic layer
   * ,--------------------------------------------------.           ,--------------------------------------------------.
-  * |   =    |   1  |   2  |   3  |   4  |   5  | Paste|           |Snagit|   6  |   7  |   8  |   9  |   0  |   -    |
+  * |   =    |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |           |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |   -    |
   * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-  * | Tab    |   Q  |   W  |   E  |   R  |   T  | Copy |           |      |   Y  |   U  |   I  |   O  |   P  |   \    |
-  * |--------+------+------+------+------+------| /Cut |           |      |------+------+------+------+------+--------|
-  * | Hyper  |   A  |S /CMD|   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |L /CMD| ; /L2|' /Hyper|
-  * |--------+------+------+------+------+------|  (   |           |  )   |------+------+------+------+------+--------|
-  * |Layer 1 |Z/Ctrl|X/Alt |   C  |   V  |   B  | [ {  |           | ] }  |   N  |   M  |   ,  | ./Alt|//Ctrl|Layer 2 |
+  * | Tab    |   Q  |   W  |   E  |   R  |   T  | "> " |           | []() |   Y  |   U  |   I  |   O  |   P  |   \    |
+  * |--------+------+------+------+------+------|      |           | SCRN |------+------+------+------+------+--------|
+  * | Hyper  |   A  |S /CMD|D/OPT | F /MD|   G  |------|           |------|   H  |   J  |K/OPT |L /CMD| ; /L2| '/Hyper|
+  * |--------+------+------+------+------+------|   (  |           |   )  |------+------+------+------+------+--------|
+  * |Shft Tab|Z/Ctrl|X/Alt |   C  |   V  |   B  | [  { |           | ]  } |   N  |   M  |   ,  | ./Alt|//Ctrl|CMD+SHFT|
   * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-  *   |  `   |Zendsk| ATOM |CMD+S | ToDo |                                       |Z:Code|Z:Quot|      |      |OS3/L3|
+  *   |  `   |Zendsk|RBMINE|CMD+S | ToDo |                                       |   _  |      |  00  |  00  |OLD BASE|
   *   `----------------------------------'                                       `----------------------------------'
   *                                        ,-------------.       ,--------------.
   *                                        | Esc  | Home |       |Layer?| Esc   |
   *                                 ,------|------|------|       |------+-------+------.
   *                                 |      |      | End  |       | Undo |       |      |
   *                                 |Shift |Backsp|------|       |------| Return|Space/|
-  *                                 | OSM  | /L5  | DEL  |       | CMD  | /LT1  |Arrows|
+  *                                 | OSM  | /NUM | DEL  |       | Ctrl | /SYML |Arrows|
   *                                 `--------------------'       `---------------------'
   *
   *Copy/Cut key copies on tap, cut's on two taps.
@@ -116,36 +92,83 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   *Two taps on Snagit key = Cmd + Shift + Opt + 4 (OS X cropping screenshot that is copied to the clipboard only.)
   */
 
-  [0] = KEYMAP(
+  [BASE] = LAYOUT_ergodox(
     //left hand
-    KC_EQUAL,     KC_1,     KC_2,    KC_3,     KC_4,     KC_5,          PAST_PS,
-    KC_TAB,       KC_Q,     KC_W,    KC_E,     KC_R,     KC_T,          TD(TD_COPY_CUT),
-    OSM(MOD_HYPR),          KC_A,  LGUI_T(KC_S),  LGUI_T(LALT_T(KC_D)),     KC_F,          KC_G,
-    TO(1), CTL_T(KC_Z), ALT_T(KC_X),  KC_C,     KC_V,     KC_B,          TD(CT_LBP),
-               KC_GRAVE,    ZENDESK,  ATOM, LGUI(KC_S),    TODO,
-                                                          KC_ESCAPE,     KC_HOME,
-                                                                          KC_END,
-                                      OSM(MOD_LSFT), LT(5,KC_BSPACE),  KC_DELETE,
+    KC_EQUAL,           KC_F1,    KC_F2,       KC_F3,       KC_F4,      KC_F5,    KC_F6,
+    KC_TAB,             KC_Q,     KC_W,        KC_E,        KC_R,       KC_T,     M_GREATER,
+    OSM(MOD_HYPR),      KC_A,  S_CMD_S,    ALT_T(KC_D), LT(MKDWN,KC_F), KC_G,
+    LSFT(KC_TAB), CTL_T(KC_Z), ALT_T(KC_X),    KC_C,        KC_V,       KC_B,     TD(CT_LBP),
+               KC_GRAVE, ZENDESK, RUBYMINE,   LGUI(KC_S),   TODO,
+                                                          KC_ESCAPE,    KC_HOME,
+                                                                        KC_END,
+                                  OSM(MOD_LSFT), LT(NUM,KC_BSPACE),     LT(MKDWN,KC_DELETE),
 
     //right hand
-    TD(TD_SNAGIT),     KC_6,     KC_7,     KC_8,     KC_9,          KC_0,       KC_MINUS,
-    _______,     KC_Y,     KC_U,     KC_I,     KC_O,          KC_P,       KC_BSLASH,
-                       KC_H,     KC_J,     KC_K,     LGUI_T(KC_L),  LT(2,KC_SCOLON),  ALL_T(KC_QUOTE),
-    TD(CT_RBP),        KC_N,     KC_M,     KC_COMMA, ALT_T(KC_DOT), CTL_T(KC_SLASH),  TO(2),
-                       LGUI(LSFT(KC_5)),  LGUI(LSFT(KC_9)),      _______, _______,    TD(TD_OSL3),
+    KC_F7,           KC_F8,     KC_F9,    KC_F10,   KC_F11,        KC_F12,           KC_MINUS,
+    MD_LINK,          KC_Y,     KC_U,     KC_I,     KC_O,          KC_P,             KC_BSLASH,
+                      KC_H,     KC_J, ALT_T(KC_K),  LGUI_T(KC_L),  LT(MEDIA,KC_SCOLON),  ALL_T(KC_QUOTE),
+    TD(CT_RBP),       KC_N,     KC_M,     KC_COMMA, ALT_T(KC_DOT), CTL_T(KC_SLASH),  SCMD_T(_______),
+                LSFT(KC_MINUS), _______,  DBLE_ZER0, DBLE_ZER0,   TO(OLD_BASE),
     L_ID_0,         KC_ESCAPE,
     LGUI(KC_Z),
-    OSM(MOD_LGUI),   LT(1,KC_ENTER),  LT(4,KC_SPACE)),
+    LT(MEDIA,KC_LCTL),  LT(SYMBL,KC_ENTER),  LT(ARROWS,KC_SPACE)),
 
-    /* Keymap 1: Symbol
+    /* Keymap 1: OLD Base layer
+    * ,--------------------------------------------------.           ,--------------------------------------------------.
+    * |   =    |   1  |   2  |   3  |   4  |   5  | []() |           |Snagit|   6  |   7  |   8  |   9  |   0  |   -    |
+    * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+    * | Tab    |   Q  |   W  |   E  |   R  |   T  | "> " |           | []() |   Y  |   U  |   I  |   O  |   P  |   \    |
+    * |--------+------+------+------+------+------|      |           | SCRN |------+------+------+------+------+--------|
+    * | Hyper  |   A  |S /CMD|   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |L /CMD| ; /L2| '/Hyper|
+    * |--------+------+------+------+------+------|   (  |           |   )  |------+------+------+------+------+--------|
+    * |Shft Tab|Z/Ctrl|X/Alt |   C  |   V  |   B  | [  { |           | ]  } |   N  |   M  |   ,  | ./Alt|//Ctrl|CMD+SHFT|
+    * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+    *   |  `   |Zendsk|RBMINE|CMD+S | ToDo |                                       |   _  |      |  00  |  00  |ToBase|
+    *   `----------------------------------'                                       `----------------------------------'
+    *                                        ,-------------.       ,--------------.
+    *                                        | Esc  | Home |       |Layer?| Esc   |
+    *                                 ,------|------|------|       |------+-------+------.
+    *                                 |      |      | End  |       | Undo |       |      |
+    *                                 |Shift |Backsp|------|       |------| Return|Space/|
+    *                                 | OSM  | /L5  | DEL  |       | Ctrl | /LT1  |Arrows|
+    *                                 `--------------------'       `---------------------'
+    *
+    *Copy/Cut key copies on tap, cut's on two taps.
+    *
+    *One tap on Snagit key = is Ctrl + Shift + C which is Snagit's selector.
+    *Two taps on Snagit key = Cmd + Shift + Opt + 4 (OS X cropping screenshot that is copied to the clipboard only.)
+    */
+
+    [OLD_BASE] = LAYOUT_ergodox(
+      //left hand
+      KC_EQUAL,           KC_1,     KC_2,    KC_3,        KC_4,     KC_5,     M_LINK,
+      KC_TAB,             KC_Q,     KC_W,    KC_E,        KC_R,     KC_T,     M_GREATER,
+      OSM(MOD_HYPR),      KC_A,  S_CMD_S, D_CMD_OPT, LT(MKDWN,KC_F),KC_G,
+      LSFT(KC_TAB), CTL_T(KC_Z), ALT_T(KC_X),  KC_C,      KC_V,     KC_B,     TD(CT_LBP),
+                 KC_GRAVE, ZENDESK, RUBYMINE, LGUI(KC_S), TODO,
+                                                          KC_ESCAPE, KC_HOME,
+                                                                     KC_END,
+                                    OSM(MOD_LSFT), LT(NUM,KC_BSPACE),  LT(MKDWN,KC_DELETE),
+
+      //right hand
+      TD(TD_SNAGIT),    KC_6,     KC_7,     KC_8,     KC_9,          KC_0,             KC_MINUS,
+      MD_LINK,          KC_Y,     KC_U,     KC_I,     KC_O,          KC_P,             KC_BSLASH,
+                        KC_H,     KC_J,     KC_K,     LGUI_T(KC_L),  LT(MEDIA,KC_SCOLON),  ALL_T(KC_QUOTE),
+      TD(CT_RBP),       KC_N,     KC_M,     KC_COMMA, ALT_T(KC_DOT), CTL_T(KC_SLASH),  SCMD_T(_______),
+                  LSFT(KC_MINUS), _______,  DBLE_ZER0, DBLE_ZER0,   TO(BASE),
+      L_ID_0,         KC_ESCAPE,
+      LGUI(KC_Z),
+      LT(MEDIA,KC_LCTL),  LT(SYMBL,KC_ENTER),  LT(ARROWS,KC_SPACE)),
+
+    /* Keymap 2: Symbol
      * ,--------------------------------------------------.           ,--------------------------------------------------.
-     * |        |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |           |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |        |
+     * |        |  1   |   2  |   3  |   4  |   5  | []() |           |Snagit|   6  |  7   |  8   |   9  |   0  |   -    |
      * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-     * |        |      |   $  |   &  |   !  |   |  | Cmd  |           |      |      |      |      |      |      |        |
+     * |        |      |   $  |   &  |   `  |   |  | Cmd  |           |      |      |      |   *  |      |      |        |
      * |--------+------+------+------+------+------| + K  |           |      |------+------+------+------+------+--------|
-     * |Shft Tab|   #  |   _  |   *  |   `  |   @  |------|           |------|   -  |   [  |   ]  |   (  |   )  |        |
+     * |        |   #  |   $  |   &  |   !  |   @  |------|           |------|   -  |   [  |   ]  |   (  |   )  |        |
      * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
-     * |Layer 0 |   %  |   ^  |      |      |   ~  |      |           |      |      |      |      |      |      |Layer 2 |
+     * |        |   %  |   ^  |      |      |   ~  |      |           |      |      |      |      |      |      |        |
      * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
      *   |      |      |      |      |      |                                       |      |      |      |      |      |
      *   `----------------------------------'                                       `----------------------------------'
@@ -158,28 +181,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *                                 `--------------------'       `--------------------'
      */
     // SYMBOLS
-  [1] = KEYMAP(
+  [SYMBL] = LAYOUT_ergodox(
     //left hand
-    _______,          KC_F1,       KC_F2,       KC_F3,       KC_F4,        KC_F5,      KC_F6,
-    _______,        _______,     KC_DLR,        KC_AMPR,     KC_EXLM,        KC_PIPE,    LGUI(KC_K),
-    LSFT(KC_TAB),   KC_HASH,  LSFT(KC_MINUS),   KC_ASTR,     KC_GRAVE,       KC_AT,
-    TO(0),          KC_PERC,     KC_CIRC,       _______,     _______,        KC_TILD,    _______,
-                    _______,     _______,       _______,     _______,        _______,
-                                                                                          _______,    _______,
-                                                                                                      _______,
-                                                                          _______,        _______,    _______,
+    _______,          KC_1,        KC_2,           KC_3,         KC_4,        KC_5,      M_LINK,
+    _______,        _______,     KC_DLR,        KC_AMPR,     KC_GRAVE,     KC_PIPE,  LGUI(KC_K),
+    _______,        KC_HASH,     KC_DLR,        KC_AMPR,      KC_EXLM,       KC_AT,
+    _______,        KC_PERC,     KC_CIRC,       _______,      _______,     KC_TILD,     _______,
+                    _______,     _______,       _______,      _______,     _______,
+                                                                                        _______,   _______,
+                                                                                                   _______,
+                                                                           _______,     _______,   _______,
 
     //right hand
-      KC_F7,        KC_F8,       KC_F9,       KC_F10,       KC_F11,      KC_F12,    KC_MINUS,
-    _______,      _______,     _______,      _______,      _______,     _______,    _______,
+   TD(TD_SNAGIT),    KC_6,        KC_7,         KC_8,         KC_9,        KC_0,   KC_MINUS,
+    _______,      _______,     _______,      KC_PAST,      _______,     _______,    _______,
                   KC_MINUS,    KC_LBRC,      KC_RBRC,      KC_LPRN,     KC_RPRN,    _______,
-    _______,      _______,     _______,      _______,      _______,     _______,    TO(2),
+    _______,      _______,     _______,      _______,      _______,     _______,    _______,
                   _______,     _______,      _______,      _______,     _______,
     L_ID_1,       _______,
     _______,
     _______,      _______,     _______),
 
-  /* Keymap 2: Media and mouse keys
+  /* Keymap 3: Media and mouse keys
    * ,--------------------------------------------------.           ,--------------------------------------------------.
    * |        |      |      |      |      |      |      |           | XKCD |      |      |      |      |      |  F15   |
    * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
@@ -187,98 +210,96 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
    * |        |Ctl L |MsLeft|MsDown|MsRght| Ctl R|------|           |------|      | Mute | VolDn| VolUp| TL 2 |  Play  |
    * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
-   * |Layer 0 |      |WHL L |      |Whl R |      |      |           |      |      |      | Prev | Next |      | Layer 0|
+   * |        |      |WHL L |      |Whl R |      |      |           |      |      |      | Prev | Next |      |        |
    * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
    *   |      |      |      |      |      |                                       | Mute |      |      |      |      |
    *   `----------------------------------'                                       `----------------------------------'
    *                                        ,-------------.       ,-------------.
    *                                        |      |      |       |LAYER?|      |
    *                                 ,------|------|------|       |------+------+------.
-   *                                 | Left |Right |      |       |      |Brwser|Brwser|
-   *                                 | Click|Click |------|       |------| Fwd  |Back  |
-   *                                 |      |      |      |       |      |      |      |
+   *                                 | Left |Right |      |       |      |Copy/ | paste|
+   *                                 | Click|Click |------|       |------| cut  |/paste|
+   *                                 |      |      |      |       |      |      |spcial|
    *                                 `--------------------'       `--------------------'
    */
   // MEDIA AND MOUSE
 
-  [2] = KEYMAP(
+  [MEDIA] = LAYOUT_ergodox(
     //left hand
     _______,    _______,         _______,         _______,         _______,         _______,         _______,
     _______,    _______,         KC_MS_WH_UP,     KC_MS_UP,        KC_MS_WH_DOWN,   _______,         _______,
     _______,    LCTL(KC_LEFT),   KC_MS_LEFT,      KC_MS_DOWN,      KC_MS_RIGHT,     RCTL(KC_RIGHT),
-    TO(1),    _______,         KC_MS_WH_LEFT,   _______,         KC_MS_WH_RIGHT,  _______,         _______,
+    XXXXXXX,    _______,         KC_MS_WH_LEFT,   _______,         KC_MS_WH_RIGHT,  _______,         _______,
                 _______,         _______,         _______,         _______,         _______,
                                                                                     _______,         _______,
                                                                                                      _______,
                                                                    KC_MS_BTN1,      KC_MS_BTN2,      _______,
 
     //right hand
-    XKCD_AUTO,  _______,       _______,         _______,         _______,    _______,    KC_F15,
+    XKCD,       _______,       _______,         _______,         _______,    _______,    KC_F15,
     _______,    _______,       _______,         _______,         _______,    _______,    KC_F14,
                 _______, KC_AUDIO_MUTE,     KC_AUDIO_VOL_DOWN,       KC_AUDIO_VOL_UP,    _______,    KC_MEDIA_PLAY_PAUSE,
-   _______,     _______,       _______,   KC_MEDIA_PREV_TRACK,   KC_MEDIA_NEXT_TRACK,    _______,    TO(0),
+   _______,     _______,       _______,   KC_MEDIA_PREV_TRACK,   KC_MEDIA_NEXT_TRACK,    _______,    XXXXXXX,
                                _______,         _______,         _______,    _______,    _______,
     L_ID_2,     _______,
     _______,
     _______,    TD(TD_COPY_CUT),    PAST_PS),
 
-    /* Keymap 3: Anki Layer for adding cloze deletions, secondary cloze deletions and new cards
-     * ,--------------------------------------------------.           ,--------------------------------------------------.
-     * |        |      |      |      |      |      |Sc cp |           |      |      |      |      |      |      |Spdcube |
-     * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-     * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
-     * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
-     * |        |      |      |      |      |      |------|           |------|      | Wrong| Hard | Good | Easy |        |
-     * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
-     * |Layer 0 |      |      |      |      |      |      |           |      |      |      |      |      |      |Layer 0 |
-     * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-     *   |      |      |      |      |      |                                       |         |      |   |      |Layer0|
-     *   `----------------------------------'                                       `----------------------------------'
-     *                                        ,-------------.       ,-------------.
-     *                                        |      |      |       |Layer?|      |
-     *                                 ,------|------|------|       |------+------+------.
-     *                                 |Add   |Add   |      |       |      |Add   |      |
-     *                                 |Cloze |Cloze2|------|       |------|Card  |Space/|
-     *                                 |      |      |      |       |      |      | Good |
-     *                                 `--------------------'       `--------------------'
-     * This layer is specifically for use with the notecard program Anki: ankiweb.net/about
-     * These keys allow adding cloze deletions, secondary cloze deletions and new cards.
-     * Sc cp = OS X cropping screenshot that is copied to the clipboard only.
-     */
-    // Anki  Layer
-  [3] = KEYMAP(
+  /* Keymap 4: Markdown Symbols
+  * ,--------------------------------------------------.           ,--------------------------------------------------.
+  * |        |      |      |      |      |      |      |           |SCRNCL|      |      |      |      |      |        |
+  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+  * |        |      |      |      |      |      |      |           |      |      |  ``` |  **  |   _  |  `   |        |
+  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+  * |        |      |      |      | TL MD|      |------|           |------|   -  |   [  |   ]  |   (  |   )  |        |
+  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+  * |        |      |      |      |      |      |      |           |      |   #  |  ##  |  ### | #### | #####|        |
+  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+  *   |      |      |      |      |      |                                       |      |      |      |      |      |
+  *   `----------------------------------'                                       `----------------------------------'
+  *                                        ,-------------.       ,-------------.
+  *                                        |      |      |       |Layer?|      |
+  *                                 ,------|------|------|       |------+------+------.
+  *                                 |      |      |      |       |      |      |      |
+  *                                 |      |      |------|       |------|      |      |
+  *                                 |      |      |      |       |      |      |      |
+  *                                 `--------------------'       `--------------------'
+  * Sc cp = OS X cropping screenshot that is copied to the clipboard only.
+  */
+  // Markdown  Layer
+  [MKDWN] = LAYOUT_ergodox(
     //left hand
     _______,       _______,       _______,       _______,       _______,       _______,       _______,
     _______,       _______,       _______,       _______,       _______,       _______,       _______,
     _______,       _______,       _______,       _______,       _______,       _______,
-    TO(0),         _______,       _______,       _______,       _______,       _______,       _______,
+    _______,       _______,       _______,       _______,       _______,       _______,       _______,
                    _______,       _______,       _______,       _______,       _______,
                                                                                _______,       _______,
                                                                                               _______,
-                                                LGUI(LSFT(KC_C)),     LALT(LGUI(LSFT(KC_C))), _______,
+                                                _______,     _______, _______,
 
    //right hand
    SCRN_CLIPB,       _______,       _______,       _______,       _______,       _______,       _______,
-   _______,          _______,       _______,       _______,       _______,       _______,       _______,
-                           _______,       KC_1,          KC_2,          KC_3,          KC_4,          _______,
-   _______,          _______,       _______,       _______,       _______,       _______,       TO(0),
-                           _______,       _______,       _______,       _______,       TO(0),
-   L_ID_3,          _______,
+   _______,          _______,   TRPLE_GRAVE,     DBLE_ASTR,LSFT(KC_MINUS),      KC_GRAVE,       _______,
+                    KC_MINUS,       KC_LBRC,       KC_RBRC,       KC_LPRN,       KC_RPRN,       _______,
+   _______,            H_ONE,         H_TWO,       H_THREE,        H_FOUR,        H_FIVE,       _______,
+                     _______,       _______,       _______,       _______,       _______,
+   _______,          _______,
    _______,
-   _______,         LGUI(KC_ENTER),       _______),
+   _______,          _______,       _______),
 
-   /* Keymap 4: Arrows
+   /* Keymap 5: Arrows
     *
     * ,--------------------------------------------------.           ,--------------------------------------------------.
     * |  RESET |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
     * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-    * |        |      | Opt+L|  Up  |Opt+R |      |      |           |      |      |      |  Up  |      |      |        |
+    * |        |      | Opt+L|  Up  |Opt+R |      |      |           |      |      | Opt+L|  Up  |Opt+R |      |        |
     * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
-    * |        |Ctrl+L| Left |  Dn  | Right|Ctrl+R|------|           |------|      | Left |  Dn  | Right|      |        |
+    * |        |Ctrl+L| Left |  Dn  | Right|Ctrl+R|------|           |------|Ctrl+L| Left |  Dn  | Right|Ctrl+R|        |
     * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
     * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
     * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-    *   | MO 4 |      |      |      |      |                                       |         |      |   |      |      |
+    *   |      |      |      |      |      |                                       |         |      |   |      |      |
     *   `----------------------------------'                                       `----------------------------------'
     *                                        ,-------------.       ,-------------.
     *                                        |      |      |       |      |      |
@@ -293,12 +314,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     */
    // Movement  Layer
 
-  [4] = KEYMAP(
+  [ARROWS] = LAYOUT_ergodox(
   //left hand
     RESET,       _______,       _______,       _______,        _______,         _______,       _______,
-    _______,     _______,        CHRM_L,       KC_UP,     CHRM_R,         _______,       _______,
+    _______,     _______,        CHRM_L,       KC_UP,           CHRM_R,         _______,       _______,
     _______,LCTL(KC_LEFT),      KC_LEFT,       KC_DOWN,       KC_RIGHT,    LCTL(KC_RIGHT),
-    TO(0),       _______,       _______,       _______,        _______,         _______,       _______,
+    _______,    _______,       _______,       _______,        _______,         _______,       _______,
                  _______,       _______,       _______,        _______,         _______,
                                                                                 _______,       _______,
                                                                                                _______,
@@ -307,13 +328,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,     _______,       _______,       _______,        _______,         _______,       _______,
     _______,     _______,        CHRM_L,         KC_UP,         CHRM_R,         _______,       _______,
            LCTL(KC_LEFT),       KC_LEFT,       KC_DOWN,       LGUI_T(KC_RIGHT),  LCTL(KC_RIGHT),       _______,
-    _______,     _______,       _______,       _______,        _______,         _______,       TO(0),
+    _______,     _______,       _______,       _______,        _______,         _______,       _______,
                  _______,       _______,       _______,        _______,         _______,
     _______,     _______,
     _______,
     _______,     _______,       _______),
 
-    /* Keymap 4: Numpad
+    /* Keymap 6: Numpad
     * ,--------------------------------------------------.           ,--------------------------------------------------.
     * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
     * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
@@ -334,11 +355,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     *                                 `--------------------'       `--------------------'
     */
     // Numpad  Layer
-    [5] = KEYMAP(
+    [NUM] = LAYOUT_ergodox(
       //left hand
       _______,        _______,     _______,     _______,        _______,        _______,    _______,
       _______,        _______,     _______,     _______,        _______,        _______,    _______,
-      _______,        _______,     _______,   TD(TD_COPY_CUT),        PAST_PS,        _______,
+      _______,        _______,     _______,   TD(TD_COPY_CUT),  PAST_PS,        _______,
       _______,        _______,     _______,     _______,        _______,        _______,    _______,
                       _______,     _______,     _______,        _______,        _______,
                                                                                             _______,    _______,
@@ -350,119 +371,196 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       _______,     KC_EQUAL,      KC_7,          KC_8,        KC_9,        KC_ASTR,        _______,
                     KC_PLUS,      KC_4,          KC_5,        KC_6,        KC_PLUS,        _______,
       _______,     KC_MINUS,      KC_1,          KC_2,        KC_3,        KC_KP_SLASH,    _______,
-                    KC_KP_0,      KC_DOT,        DBL_0,       DBL_0,       KC_KP_ENTER,
+                    KC_KP_0,      KC_DOT,        DBLE_ZER0,   DBLE_ZER0,   KC_KP_ENTER,
       _______,      _______,
       _______,
       _______,      KC_PENT,      _______),
-
 };
 
 const uint16_t PROGMEM fn_actions[] = {
   [1] = ACTION_LAYER_TAP_TOGGLE(1)
 };
 
-const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
-{
-      switch(id) {
-        case 0:
-          if (record->event.pressed) {
-            SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
-          }
-          break;
-        case 2:
-          if (record->event.pressed) {
-            return MACRO( T(0), T(0), END  );
-          }
-          break;
-        case 3:
-          if (record->event.pressed) {
-            return MACRO( D(LGUI), T(SPACE), U(LGUI), D(LSFT), T(L), U(LSFT), T(A), T(Y), T(E), T(R), T(SPACE), T(0), T(SPACE), T(MINUS), T(SPACE), D(LSFT), T(B), U(LSFT), T(A), T(S), T(E), END);
-            /*SEND_STRING ("Layer 0: Base Layer - keyboard-layout-editor.com/#/gists/58a85096e0ad0f343b57ea005121b261");*/
-          }
-          break;
-        case 4:
-          if (record->event.pressed) {
-            return MACRO( D(LGUI), T(SPACE), U(LGUI), D(LSFT), T(L), U(LSFT), T(A), T(Y), T(E), T(R), T(SPACE), T(1), T(SPACE), T(MINUS), T(SPACE), D(LSFT), T(S), U(LSFT), T(Y), T(M), T(B), END);
-            /*SEND_STRING ("Layer 1: Symbol Layer - keyboard-layout-editor.com/#/gists/be9ae4b4100a41b8b942ca27a7978d68");*/
-          }
-          break;
-        case 5:
-            if (record->event.pressed) {
-              return MACRO( D(LGUI), T(SPACE), U(LGUI), D(LSFT), T(L), U(LSFT), T(A), T(Y), T(E), T(R), T(SPACE), T(2), T(SPACE), T(MINUS), T(SPACE), D(LSFT), T(M), U(LSFT), T(O), T(U), T(S), END);
-              /*SEND_STRING ("Layer 2: Media & Mousekeys Layer - keyboard-layout-editor.com/#/gists/e68114befd162858f8b4e7f5a2b34ee9");*/
-            }
-            break;
-        case 6:
-            if (record->event.pressed) {
-              return MACRO( D(LGUI), T(SPACE), U(LGUI), D(LSFT), T(L), U(LSFT), T(A), T(Y), T(E), T(R), T(SPACE), T(3), T(SPACE), T(MINUS), T(SPACE), D(LSFT), T(A), U(LSFT), T(N), T(K), T(I), END);
-              /*SEND_STRING ("Layer 3: Anki Layer - keyboard-layout-editor.com/#/gists/11bbe5e7df8672be282a83b41128920c");*/
-            }
-            break;
-        case 10:
-            if (record->event.pressed) {
-            SEND_STRING ("https://xkcd.com/1319/");
-          }
-            break;
-        case 12:
-            if (record->event.pressed) {
-                    key_timer = timer_read();
-            }
-            else {
-                 if (timer_elapsed(key_timer) > 150) {
-                   return MACRO( D(LGUI), D(LSFT), T(V), U(LSFT), U(LGUI),  END);
-                 }
-                 else {
-                  return MACRO( D(LGUI), T(V), U(LGUI),  END);
-                 }
-               }
-           break;
-        case 14:
-            if (record->event.pressed) {
-                    key_timer = timer_read();
-            }
-            else {
-                 if (timer_elapsed(key_timer) > 150) {
-                   return MACRO( D(LGUI), T(SPACE), U(LGUI), T(T), T(O), T(D), T(O), T(I), T(ENTER), END); //switch to Todoist when held and released
-                 }
-                 else {
-                   return MACRO( D(LGUI), D(LSFT), T(A), U(LSFT), U(LGUI), END); //macro to open Todoist new task dialog
-                 }
-        }
-           break;
-        case 15:
-            if (record->event.pressed){
-              return MACRO( D(LGUI), T(SPACE), U(LGUI), T(A), T(T), T(O), T(M), T(ENTER), END);
-            }
-            break;
-        case 16:
-            if (record->event.pressed){
-              return MACRO( D(LGUI), T(SPACE), U(LGUI), D(LSFT), T(BSLASH), T(BSLASH), U(LSFT), T(Z), T(E), T(N), END);
-            }
-            break;
-        }
-    return MACRO_NONE;
-};
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
   switch (keycode) {
-    // dynamically generate these.
     case EPRM:
       if (record->event.pressed) {
         eeconfig_init();
       }
       return false;
       break;
+
     case VRSN:
       if (record->event.pressed) {
         SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
       }
       return false;
       break;
-  }
-  return true;
-}
 
+    case MD_LINK:
+      if (record->event.pressed){
+        key_timer = timer_read();
+      } else {
+        if (timer_elapsed(key_timer) > 150) {
+          SEND_STRING ("([Video](");
+        } else {
+          SEND_STRING ("([Screenshot](");
+        }
+        SEND_STRING(SS_LGUI("v"));
+        SEND_STRING("))");
+      }
+      break;
+
+    case XKCD:
+        if (record->event.pressed) {
+        SEND_STRING ("https://xkcd.com/1319/");
+      }
+      break;
+
+    case DBLE_ZER0:
+      if (record->event.pressed){
+        SEND_STRING ("00");
+      }
+      break;
+
+    case DBLE_ASTR:
+      if (record->event.pressed){
+        SEND_STRING ("**");
+        SEND_STRING ("**");
+        SEND_STRING (SS_TAP(X_LEFT));
+        SEND_STRING (SS_TAP(X_LEFT));
+      }
+      break;
+
+    case TRPLE_GRAVE:
+      if (record->event.pressed){
+        SEND_STRING ("```");
+      }
+      break;
+
+    case L_ID_0:
+      if (record->event.pressed) {
+        SEND_STRING (SS_LGUI(" "));
+        SEND_STRING ("Layer 0: Base");
+      }
+      break;
+
+    case L_ID_1:
+      if (record->event.pressed) {
+        SEND_STRING (SS_LGUI(" "));
+        SEND_STRING ("Layer 1: Symbols");
+      }
+      break;
+
+    case L_ID_2:
+      if (record->event.pressed) {
+        SEND_STRING (SS_LGUI(" "));
+        SEND_STRING ("Layer 2: Media & Mousekeys");
+      }
+      break;
+
+    case PAST_PS:
+      if (record->event.pressed) {
+        key_timer = timer_read();
+      } else {
+        if (timer_elapsed(key_timer) > 150) {
+          SEND_STRING (SS_LGUI("V")); // Paste special
+        } else {
+          SEND_STRING (SS_LGUI("v")); // Paste
+        }
+      }
+      break;
+
+    case TODO:
+      if (record->event.pressed) {
+        key_timer = timer_read();
+      } else {
+        if (timer_elapsed(key_timer) > 150) { //switch to Todoist when held and released
+          SEND_STRING (SS_LGUI(" "));
+          SEND_STRING ("Todoist");
+          SEND_STRING (SS_TAP(X_ENTER));
+        } else {
+          SEND_STRING (SS_LGUI(SS_LCTRL("a"))); //macro to open Todoist new task dialog
+        }
+      }
+      break;
+
+    case RUBYMINE:
+      if (record->event.pressed){
+        SEND_STRING (SS_LGUI(" "));
+        SEND_STRING ("RUBYMINE");
+        SEND_STRING (SS_TAP(X_ENTER));
+      }
+      break;
+
+    case ZENDESK:
+      if (record->event.pressed){
+        SEND_STRING (SS_LGUI(" "));
+        SEND_STRING ("||ZEN");
+        SEND_STRING (SS_TAP(X_ENTER));
+      }
+      break;
+
+    case H_ONE:
+      if (record->event.pressed){
+        SEND_STRING ("# ");
+      }
+      break;
+
+    case H_TWO:
+      if (record->event.pressed){
+        SEND_STRING ("## ");
+      }
+      break;
+
+    case H_THREE:
+      if (record->event.pressed){
+        SEND_STRING ("### ");
+      }
+      break;
+
+    case H_FOUR:
+      if (record->event.pressed){
+        SEND_STRING ("#### ");
+      }
+      break;
+
+    case H_FIVE:
+      if (record->event.pressed){
+        SEND_STRING ("##### ");
+      }
+      break;
+    case M_LINK:
+      if (record->event.pressed){
+          SEND_STRING ("[]()");
+        }
+        break;
+    case M_GREATER:
+      if (record->event.pressed){
+          SEND_STRING ("> ");
+      }
+      break;
+    }
+  return true;
+};
 
 void matrix_scan_user(void) {
+  uint8_t layer = biton32(layer_state);
 
+  ergodox_board_led_off();
+  ergodox_right_led_1_off();
+  ergodox_right_led_2_off();
+  ergodox_right_led_3_off();
+  switch (layer) {
+    case 1:
+      ergodox_right_led_1_on();
+      break;
+    case 2:
+      ergodox_right_led_2_on();
+      break;
+    default:
+        break;
+  }
 };
