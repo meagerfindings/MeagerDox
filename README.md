@@ -52,7 +52,7 @@ Many features in this layout are either directly inspired by or are adaptations 
 
 ## Base Layer
 
-![Base](https://meagerfindings.com/assets/img/ergodox/base.png)
+![Base](https://matgreten.dev/images/ergodox/base.png)
 
 The base layer retains the alphas from the QWERTY layout without any modifications.
 
@@ -66,13 +66,13 @@ The base layer retains the alphas from the QWERTY layout without any modificatio
 
 ## Old Base Layer
 
-![Old Base](https://meagerfindings.com/assets/img/ergodox/old_base.png)
+![Old Base](https://matgreten.dev/images/ergodox/old_base.png)
 
 I am moving into a new position (software engineering) at work from a Support position. My hope is to use my F keys more often and write fewer emails. This is my old base layer, still easily accessible, as I'm not used to having F key's on my top row quite yet.
 
 ## Symbols Layer
 
-![Symbols](https://meagerfindings.com/assets/img/ergodox/symbols.png)
+![Symbols](https://matgreten.dev/images/ergodox/symbols.png)
 
 Holding down the `enter` key with your right thumb toggles the symbol layer.
 
@@ -90,19 +90,19 @@ The right hand has a media controls under the homerow for quick muting/pausing.
 
 ## Markdown Layer
 
-![Markdown](https://meagerfindings.com/assets/img/ergodox/markdown.png)
+![Markdown](https://matgreten.dev/images/ergodox/markdown.png)
 
 This layer places most common markdown symbols under the right hand. You can reach this layer by holding down the `F` key on your left hand.
 
 ## Arrow/Movements Layer
 
-![Movement](https://meagerfindings.com/assets/img/ergodox/movement_arrows.png)
+![Movement](https://matgreten.dev/images/ergodox/movement_arrows.png)
 
 Toggled by holding down the space key with the right thumb. This isn't vim like movement, nope, it's `WASD` but over one column. So I guess it's actually `ESDF` on the left hand and `IJKL` on the right hand to better line up with the columns offset/staggered columns on the Dox.
 
 ## Numpad Layer
 
-![Numpad](https://meagerfindings.com/assets/img/ergodox/numpad.png)
+![Numpad](https://matgreten.dev/images/ergodox/numpad.png)
 
 My right hand is pretty comfortable with tenkey number input so this is easily accessible by holding down backspace with the left thumb.
 
