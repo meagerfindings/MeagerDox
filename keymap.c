@@ -35,7 +35,6 @@ enum custom_keycodes {
   M_LINK,
   M_GREATER,
   TD_COPY_CUT = 6,
-  TD_SNAGIT = 8,
   TD_B_L_SEL = 10,
   CT_LBP = 11,
   CT_RBP = 12
@@ -55,8 +54,6 @@ static uint16_t key_timer; //key timer for macros
 tap_dance_action_t tap_dance_actions[] = {
   //Tap once for Copy, twice for Paste, three times for Cut.
   [TD_COPY_CUT]  = ACTION_TAP_DANCE_DOUBLE(LGUI(KC_C),LGUI(KC_X)),
-    //Tap once for Snagit, twice for Cmd + Shift + Opt + 4 (OS X cropping screenshot that is copied to the clipboard only.)
-  [TD_SNAGIT] = ACTION_TAP_DANCE_DOUBLE(LCTL(LSFT(KC_C)), LCTL(LGUI(LSFT(KC_4)))),
   [CT_LBP] = ACTION_TAP_DANCE_DOUBLE (KC_LBRC, KC_LPRN),
   [CT_RBP] = ACTION_TAP_DANCE_DOUBLE (KC_RBRC, KC_RPRN)
 };
@@ -69,11 +66,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
   * | Tab    |   Q  |   W  |   E  |   R  |   T  | "> " |           | []() |   Y  |   U  |   I  |   O  |   P  |   \    |
   * |--------+------+------+------+------+------|      |           | SCRN |------+------+------+------+------+--------|
-  * | Hyper  |   A  |S /CMD|D/OPT | F /MD|   G  |------|           |------|   H  |   J  |K/OPT |L /CMD| ; /L2| '/Hyper|
+  * | Hyper  |   A  |S /CMD|D/OPT | F /MD|   G  |------|           |------|   H  |   J  |K/OPT |L /CMD|   ;  | '/Hyper|
   * |--------+------+------+------+------+------|   (  |           |   )  |------+------+------+------+------+--------|
   * |Shft Tab|Z/Ctrl|X/Alt |   C  |   V  |   B  | [  { |           | ]  } |   N  |   M  |   ,  | ./Alt|//Ctrl|CMD+SHFT|
   * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-  *   |  `   |Zendsk|RBMINE|CMD+S | ToDo |                                       |   _  |      |  00  |  00  |OLD BASE|
+  *   |  `   |Zendsk|RBMINE|CMD+S | ToDo |                                       |   _  | MEDIA|  00  |  00  |OLD BASE|
   *   `----------------------------------'                                       `----------------------------------'
   *                                        ,-------------.       ,--------------.
   *                                        | Esc  | Home |       |Layer?| Esc   |
@@ -84,9 +81,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   *                                 `--------------------'       `---------------------'
   *
   *Copy/Cut key copies on tap, cut's on two taps.
-  *
-  *One tap on Snagit key = is Ctrl + Shift + C which is Snagit's selector.
-  *Two taps on Snagit key = Cmd + Shift + Opt + 4 (OS X cropping screenshot that is copied to the clipboard only.)
   */
 
   [BASE] = LAYOUT_ergodox(
@@ -102,17 +96,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     //right hand
     KC_F7,           KC_F8,     KC_F9,    KC_F10,   KC_F11,        KC_F12,           KC_MINUS,
-    MD_LINK,          KC_Y,     KC_U,     KC_I,     KC_O,          KC_P,             KC_BSLS,
-                      KC_H,     KC_J, ALT_T(KC_K),  LGUI_T(KC_L),  LT(MEDIA,KC_SCLN),  ALL_T(KC_QUOTE),
+    MD_LINK,          KC_Y,     KC_U,     KC_I,     KC_O,          KC_P,      KC_SCLN, KC_BSLS,
+                      KC_H,     KC_J, ALT_T(KC_K),  LGUI_T(KC_L), ),  ALL_T(KC_QUOTE),
     TD(CT_RBP),       KC_N,     KC_M,     KC_COMMA, ALT_T(KC_DOT), CTL_T(KC_SLASH),  SCMD_T(_______),
-                LSFT(KC_MINUS), _______,  DBLE_ZER0, DBLE_ZER0,   TO(OLD_BASE),
+                LSFT(KC_MINUS), TG(MEDIA), DBLE_ZER0, DBLE_ZER0,   TO(OLD_BASE),
     L_ID_0,         KC_ESCAPE,
     LGUI(KC_Z),
     LT(MEDIA,KC_LCTL),  LT(SYMBL,KC_ENTER),  LT(ARROWS,KC_SPACE)),
 
     /* Keymap 1: OLD Base layer
     * ,--------------------------------------------------.           ,--------------------------------------------------.
-    * |   =    |   1  |   2  |   3  |   4  |   5  | []() |           |Snagit|   6  |   7  |   8  |   9  |   0  |   -    |
+    * |   =    |   1  |   2  |   3  |   4  |   5  | []() |           |      |   6  |   7  |   8  |   9  |   0  |   -    |
     * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
     * | Tab    |   Q  |   W  |   E  |   R  |   T  | "> " |           | []() |   Y  |   U  |   I  |   O  |   P  |   \    |
     * |--------+------+------+------+------+------|      |           | SCRN |------+------+------+------+------+--------|
@@ -131,9 +125,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     *                                 `--------------------'       `---------------------'
     *
     *Copy/Cut key copies on tap, cut's on two taps.
-    *
-    *One tap on Snagit key = is Ctrl + Shift + C which is Snagit's selector.
-    *Two taps on Snagit key = Cmd + Shift + Opt + 4 (OS X cropping screenshot that is copied to the clipboard only.)
     */
 
     [OLD_BASE] = LAYOUT_ergodox(
@@ -148,7 +139,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                     OSM(MOD_LSFT), LT(NUM,KC_BSPC),  LT(MKDWN,KC_DELETE),
 
       //right hand
-      TD(TD_SNAGIT),    KC_6,     KC_7,     KC_8,     KC_9,          KC_0,             KC_MINUS,
+      _______,          KC_6,     KC_7,     KC_8,     KC_9,          KC_0,             KC_MINUS,
       MD_LINK,          KC_Y,     KC_U,     KC_I,     KC_O,          KC_P,             KC_BSLS,
                         KC_H,     KC_J,     KC_K,     LGUI_T(KC_L),  LT(MEDIA,KC_SCLN),  ALL_T(KC_QUOTE),
       TD(CT_RBP),       KC_N,     KC_M,     KC_COMMA, ALT_T(KC_DOT), CTL_T(KC_SLASH),  SCMD_T(_______),
@@ -159,7 +150,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /* Keymap 2: Symbol
      * ,--------------------------------------------------.           ,--------------------------------------------------.
-     * |        |  1   |   2  |   3  |   4  |   5  | []() |           |Snagit|   6  |  7   |  8   |   9  |   0  |   -    |
+     * |        |  1   |   2  |   3  |   4  |   5  | []() |           |      |   6  |  7   |  8   |   9  |   0  |   -    |
      * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
      * |        |      |   $  |   &  |   `  |   |  | Cmd  |           |      |      |      |   *  |      |      |        |
      * |--------+------+------+------+------+------| + K  |           |      |------+------+------+------+------+--------|
@@ -190,7 +181,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                            _______,     _______,   _______,
 
     //right hand
-   TD(TD_SNAGIT),    KC_6,        KC_7,         KC_8,         KC_9,        KC_0,   KC_MINUS,
+   _______,          KC_6,        KC_7,         KC_8,         KC_9,        KC_0,   KC_MINUS,
     _______,      _______,     _______,      KC_PAST,      _______,     _______,    _______,
                   KC_MINUS,    KC_LBRC,      KC_RBRC,      KC_LPRN,     KC_RPRN,    _______,
     _______,      _______,     _______,      _______,      _______,     _______,    _______,

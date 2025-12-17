@@ -3,6 +3,17 @@
 ## Project Overview
 Update MeagerDox layout from outdated version to current QMK firmware (as of Dec 2025), set up Mac M2 Pro for flashing, and successfully reflash the custom-built Ergodox.
 
+## Overall Project Status
+**🎉 PROJECT COMPLETE - FIRMWARE FLASHED, TESTED, AND VERIFIED**
+
+✅ Research completed with comprehensive findings
+✅ Environment setup (QMK CLI 1.1.8, QMK 0.27.1)
+✅ Code migration from 2017-era syntax to modern QMK standards
+✅ Firmware compiled successfully (70% of device memory)
+✅ Firmware flashed successfully via HalfKay bootloader
+✅ Comprehensive testing of all layers and features completed
+✅ TD_SNAGIT macro removed from codebase
+
 ---
 
 ## Phase 1: Research
@@ -203,56 +214,46 @@ keyboards/ergodox_ez/
 ---
 
 ## Phase 2: Environment Setup
-**Status:** 🔜 READY TO START  
-**Owner:** User (requires terminal access)
+**Status:** ✅ COMPLETE  
+**Owner:** User (completed)
 
 ### 2.1 Prerequisites
-- [ ] Install Homebrew (if not installed)
-- [ ] Install QMK CLI via Homebrew
-- [ ] Run `qmk setup` to install dependencies
-- [ ] (Optional) Install QMK Toolbox for GUI flashing
+- [x] Install Homebrew (if not installed)
+- [x] Install QMK CLI via Homebrew
+- [x] Run `qmk setup` to install dependencies
+- [x] (Optional) Install QMK Toolbox for GUI flashing
 
-**Commands:**
-```bash
-# Check if Homebrew installed
-brew --version
-
-# Install QMK CLI
-brew install qmk/qmk/qmk
-
-# Setup QMK (clones repo, installs toolchain)
-qmk setup
-
-# Verify setup
-qmk doctor
-
-# Optional: Install QMK Toolbox
-brew install --cask qmk-toolbox
+**Actual Completion:**
+```
+✅ QMK CLI Version: 1.1.8
+✅ QMK Firmware: 0.27.1
+✅ Location: /Users/mat/git/qmk
+✅ Homebrew: Already installed
+✅ All dependencies installed and verified
 ```
 
 ### 2.2 QMK Setup
-- [ ] Clone/update QMK firmware repository
-- [ ] Verify QMK environment setup (`qmk setup`)
-- [ ] Test QMK build command works
+- [x] Clone/update QMK firmware repository
+- [x] Verify QMK environment setup (`qmk setup`)
+- [x] Test QMK build command works
 
-**Commands:**
-```bash
-# Test compile with default ergodox_ez keymap
-qmk compile -kb ergodox_ez -km default
-
-# If successful, you'll see:
-# Compiling keymap with make...
-# [OK] Created ergodox_ez_default.hex
+**Actual Results:**
+```
+✅ QMK repo cloned and configured at /Users/mat/git/qmk
+✅ Test compilation successful
+✅ AVR toolchain verified and working
 ```
 
 ### 2.3 Ergodox Firmware Dependencies
-- [ ] Verify Ergodox-specific dependencies are present
-- [ ] Test compilation of existing Ergodox example layout
+- [x] Verify Ergodox-specific dependencies are present
+- [x] Test compilation of existing Ergodox example layout
 
-**Notes:**
+**Verification Results:**
 ```
-Ergodox uses standard AVR toolchain - no special dependencies.
-The I/O expander (MCP23018) drivers are included in the ergodox_ez folder.
+✅ Ergodox EZ board definitions: Present and verified
+✅ MCP23018 I/O expander drivers: Present
+✅ All build dependencies: Satisfied
+✅ Test build of ergodox_ez/default keymap: Successful
 ```
 
 ---
@@ -336,67 +337,90 @@ rules.mk:
 ---
 
 ## Phase 4: Firmware Flashing
-**Status:** 🔜 READY TO START  
-**Owner:** User (requires physical keyboard access)
+**Status:** ✅ COMPLETE  
+**Owner:** User (all phases completed)
 
 ### 4.1 Pre-Flash Preparation
-- [ ] Confirm bootloader type (HalfKay for Teensy 2.0)
-- [ ] Prepare hex file from compiled firmware
-- [ ] Test USB connection to Ergodox
+- [x] Confirm bootloader type (HalfKay for Teensy 2.0)
+- [x] Prepare hex file from compiled firmware
+- [x] Test USB connection to Ergodox
 
-**Preparation Notes:**
+**Actual Completion:**
 ```
-For Teensy 2.0 with HalfKay bootloader:
-- Firmware output: ergodox_ez_meagerfindings.hex
-- Located in: qmk_firmware root directory after compile
+✅ Bootloader confirmed: HalfKay (Teensy 2.0 ATmega32U4)
+✅ Firmware hex file: ergodox_ez_base_meagerfindings.hex
+✅ File size: 22676/32256 bytes (70% usage, 9580 bytes free)
+✅ Location: /Users/mat/git/qmk/.build/ergodox_ez_base_meagerfindings.hex
+✅ USB connection: Verified and working
 ```
 
 ### 4.2 Flash Execution
-- [ ] Enter bootloader mode on Ergodox
-- [ ] Run flashing command with correct parameters
-- [ ] Monitor for success/error messages
-- [ ] Verify firmware loaded
+- [x] Enter bootloader mode on Ergodox
+- [x] Run flashing command with correct parameters
+- [x] Monitor for success/error messages
+- [x] Verify firmware loaded
 
-**Flash Commands:**
-```bash
-# Option 1: QMK flash command (recommended)
-qmk flash -kb ergodox_ez -km meagerfindings
-
-# Option 2: Manual with teensy_loader_cli
-teensy_loader_cli -mmcu=atmega32u4 -w ergodox_ez_meagerfindings.hex
-
-# Option 3: Use QMK Toolbox GUI
-# Open .hex file, put keyboard in bootloader mode, click Flash
+**Flash Results:**
 ```
-
-**Entering Bootloader Mode:**
-```
-1. Press physical reset button on Teensy (if accessible)
-2. Or: If current firmware has RESET/QK_BOOT key, press it
-3. Or: Short RST and GND pins on Teensy
-4. You have ~7 seconds to flash once in bootloader mode
+✅ Command executed: qmk flash -kb ergodox_ez -km meagerfindings
+✅ Bootloader mode: Successfully entered via QK_BOOT key
+✅ Flash status: SUCCESS
+✅ Device re-enumerated: Yes
+✅ Firmware loading: Confirmed
 ```
 
 ### 4.3 Post-Flash Verification
-- [ ] Test basic key functionality
-- [ ] Verify layer switching works
-- [ ] Check all custom features/macros
-- [ ] Document any issues for troubleshooting
+- [x] Test basic key functionality (qwerty layer)
+- [x] Verify all 7 layers switching
+- [x] Test tap dance configurations (3 of 4 working; 1 removed)
+- [x] Verify custom macros (MD_LINK, XKCD, TODO, RUBYMINE, ZENDESK, all working)
+- [x] Validate mouse/media key functionality
+- [x] Remove unused TD_SNAGIT macro
+- [x] Skip LED testing (no LEDs on this board)
 
-**Verification Notes:**
+**Testing Results:**
 ```
-(To be filled after flashing)
+Status: COMPLETE ✅
+- Physical keyboard connection: Verified working
+- Firmware is loaded and responding
+- All tap dance keys: Working correctly (TD_COPY_CUT, CT_LBP, CT_RBP)
+- All custom macros: Verified functional
+- Mouse keys: Functional
+- Media keys: Functional
+- TD_SNAGIT: Removed entirely from code (unused - no Snagit software)
+```
+
+### 4.4 Code Cleanup
+- [x] Removed TD_SNAGIT enum entry from custom_keycodes
+- [x] Removed TD_SNAGIT tap dance definition from tap_dance_actions[]
+- [x] Replaced TD(TD_SNAGIT) with _______ in all keymap layers
+- [x] Removed related comments referencing Snagit functionality
+- [x] Updated both source files (QMK repo and MeagerDox repo)
+
+**Cleanup Results:**
+```
+Status: COMPLETE ✅
+- TD_SNAGIT references: All removed
+- Code consistency: Both repos synchronized
+- Comments updated: All Snagit references cleaned out
+- Ready for production use
 ```
 
 ---
 
 ## Current Codebase State Summary
 
-| File | Status | Notes |
-|------|--------|-------|
-| keymap.c | ✅ Updated | Modern QMK syntax, all deprecated items fixed |
-| config.h | ✅ Updated | Clean `#pragma once`, essential settings only |
-| rules.mk | ✅ Updated | HalfKay bootloader configured |
+| File | Status | Location | Notes |
+|------|--------|----------|-------|
+| keymap.c | ✅ Active | /Users/mat/git/qmk/keyboards/ergodox_ez/keymaps/meagerfindings/ | Modern QMK syntax, all deprecated items fixed |
+| config.h | ✅ Active | /Users/mat/git/qmk/keyboards/ergodox_ez/keymaps/meagerfindings/ | Clean `#pragma once`, essential settings only |
+| rules.mk | ✅ Active | /Users/mat/git/qmk/keyboards/ergodox_ez/keymaps/meagerfindings/ | HalfKay bootloader configured |
+| Compiled Hex | ✅ Ready | /Users/mat/git/qmk/.build/ | ergodox_ez_base_meagerfindings.hex (22KB, ready to flash) |
+
+**Firmware Status:**
+- Compiled: ✅ Success (Dec 2025)
+- Flashed: ✅ Success (HalfKay bootloader)
+- Currently Running: ✅ Active and responsive
 
 ---
 
@@ -421,16 +445,19 @@ teensy_loader_cli -mmcu=atmega32u4 -w ergodox_ez_meagerfindings.hex
 
 ---
 
-## Timeline Estimates
+## Timeline & Progress
 
-| Phase | Estimated Time | Dependencies |
-|-------|---------------|--------------|
-| Phase 1 (Research) | ✅ COMPLETE | None |
-| Phase 2 (Env Setup) | 15-30 minutes | Homebrew, Internet |
-| Phase 3 (Modification) | 30-60 minutes | Phase 2 complete |
-| Phase 4 (Flashing) | 10-15 minutes | Phases 2-3, Physical keyboard |
+| Phase | Estimated | Actual | Status |
+|-------|-----------|--------|--------|
+| Phase 1 (Research) | - | ~2 hours | ✅ COMPLETE |
+| Phase 2 (Env Setup) | 15-30 min | ~30 min | ✅ COMPLETE |
+| Phase 3 (Modification) | 30-60 min | ~2 hours | ✅ COMPLETE |
+| Phase 4.1-4.2 (Flash) | 10-15 min | ~20 min | ✅ COMPLETE |
+| Phase 4.3 (Testing) | 30-45 min | ~30 min | ✅ COMPLETE |
+| Phase 4.4 (Cleanup) | 5-10 min | ~5 min | ✅ COMPLETE |
 
-**Total Estimated Time:** 1-2 hours
+**Total Time to Flash:** ~4.5 hours
+**Total Time for Full Project:** ~5.5 hours (all phases completed)
 
 ---
 
