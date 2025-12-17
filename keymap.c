@@ -16,14 +16,10 @@ enum custom_keycodes {
   VRSN,
   MD_LINK,
   XKCD,
-  DBLE_ZER0,
   L_ID_0,
   L_ID_1,
   L_ID_2,
   PAST_PS,
-  TODO,
-  RUBYMINE,
-  ZENDESK,
   DBLE_ASTR,
   TRPLE_GRAVE,
   H_ONE,
@@ -70,7 +66,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   * |--------+------+------+------+------+------|   (  |           |   )  |------+------+------+------+------+--------|
   * |Shft Tab|Z/Ctrl|X/Alt |   C  |   V  |   B  | [  { |           | ]  } |   N  |   M  |   ,  | ./Alt|//Ctrl|CMD+SHFT|
   * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-  *   |  `   |Zendsk|RBMINE|CMD+S | ToDo |                                       |   _  | MEDIA| CP/CT|Paste |      |
+  *   |  `   |      |      |CMD+S |      |                                       |   _  | MEDIA| CP/CT|Paste |      |
   *   `----------------------------------'                                       `----------------------------------'
   *                                        ,-------------.       ,--------------.
   *                                        | Esc  | Home |       |Layer?| Esc   |
@@ -89,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,             KC_Q,     KC_W,        KC_E,        KC_R,       KC_T,     M_GREATER,
     OSM(MOD_HYPR),      KC_A,  S_CMD_S,    ALT_T(KC_D), LT(MKDWN,KC_F), KC_G,
     LSFT(KC_TAB), CTL_T(KC_Z), ALT_T(KC_X),    KC_C,        KC_V,       KC_B,     TD(CT_LBP),
-               KC_GRAVE, ZENDESK, RUBYMINE,   LGUI(KC_S),   TODO,
+               KC_GRAVE, _______, _______,   LGUI(KC_S),   _______,
                                                           KC_ESCAPE,    KC_HOME,
                                                                         KC_END,
                                   OSM(MOD_LSFT), LT(NUM,KC_BSPC),     LT(MKDWN,KC_DELETE),
@@ -315,7 +311,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       _______,     KC_EQUAL,      KC_7,          KC_8,        KC_9,        KC_ASTR,        _______,
                     KC_PLUS,      KC_4,          KC_5,        KC_6,        KC_PLUS,        _______,
       _______,     KC_MINUS,      KC_1,          KC_2,        KC_3,        KC_KP_SLASH,    _______,
-                    KC_KP_0,      KC_DOT,        DBLE_ZER0,   DBLE_ZER0,   KC_KP_ENTER,
+                    KC_KP_0,      KC_DOT,        _______,     _______,     KC_KP_ENTER,
       _______,      _______,
       _______,
       _______,      KC_PENT,      _______),
@@ -357,12 +353,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case XKCD:
         if (record->event.pressed) {
         SEND_STRING ("https://xkcd.com/1319/");
-      }
-      break;
-
-    case DBLE_ZER0:
-      if (record->event.pressed){
-        SEND_STRING ("00");
       }
       break;
 
@@ -411,36 +401,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         } else {
           SEND_STRING (SS_LGUI("v")); // Paste
         }
-      }
-      break;
-
-    case TODO:
-      if (record->event.pressed) {
-        key_timer = timer_read();
-      } else {
-        if (timer_elapsed(key_timer) > 150) { //switch to Todoist when held and released
-          SEND_STRING (SS_LGUI(" "));
-          SEND_STRING ("Todoist");
-          SEND_STRING (SS_TAP(X_ENTER));
-        } else {
-          SEND_STRING (SS_LGUI("a")); //macro to open Todoist new task dialog - Cmd+A
-        }
-      }
-      break;
-
-    case RUBYMINE:
-      if (record->event.pressed){
-        SEND_STRING (SS_LGUI(" "));
-        SEND_STRING ("RUBYMINE");
-        SEND_STRING (SS_TAP(X_ENTER));
-      }
-      break;
-
-    case ZENDESK:
-      if (record->event.pressed){
-        SEND_STRING (SS_LGUI(" "));
-        SEND_STRING ("||ZEN");
-        SEND_STRING (SS_TAP(X_ENTER));
       }
       break;
 
