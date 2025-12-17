@@ -29,12 +29,11 @@ This repo contains the source files that are copied into the QMK repo for compil
 ## Layers
 
 0. **BASE** - Primary QWERTY layer
-1. **OLD_BASE** - Alternative base layer
-2. **SYMBL** - Symbols and special characters
-3. **MEDIA** - Media controls and mouse keys
-4. **MKDWN** - Markdown shortcuts (headers, links)
-5. **ARROWS** - Arrow keys and navigation
-6. **NUM** - Number pad
+1. **SYMBL** - Symbols and special characters
+2. **MEDIA** - Media controls and mouse keys
+3. **MKDWN** - Markdown shortcuts (headers, links)
+4. **ARROWS** - Arrow keys and navigation
+5. **NUM** - Number pad
 
 ## Commands
 

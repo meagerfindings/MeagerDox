@@ -11,7 +11,6 @@
 	- [TapDance Keys](#tapdance-keys)
 - [Base Layer](#base-layer)
 	- [Things to note:](#things-to-note)
-- [Old Base Layer](#old-base-layer)
 - [Symbols Layer](#symbols-layer)
 - [Mouse & Media Keys Layer](#mouse-media-keys-layer)
 - [Markdown Layer](#markdown-layer)
@@ -60,15 +59,9 @@ The base layer retains the alphas from the QWERTY layout without any modificatio
 
 - The shift key is a One Shot Modifier key, meaning shift is not submitted when the key is tapped, instead, it only submits when you either tap it again, or on the next key press.
   - There is no CAPSLOCK key designated as it is pretty comfortable to simply hold down shift in this layout and continue typing.
-- There is only one layer that you can fully switch to on this layout, the [Old Base layer](#old-base-layer). All other layers require holding a key to reach them. For the most part, the key that toggles a layer, will be on the opposite hand that will be typing with that layer.
-  - For example: the symbols layer is reached by holding down the enter key with your right thumb, and most of the symbols are located on the left hand board.
+- All layers are accessed by holding a key to reach them. For the most part, the key that toggles a layer, will be on the opposite hand that will be typing with that layer.
+   - For example: the symbols layer is reached by holding down the enter key with your right thumb, and most of the symbols are located on the left hand board.
 
-
-## Old Base Layer
-
-![Old Base](https://matgreten.dev/images/ergodox/old_base.png)
-
-I am moving into a new position (software engineering) at work from a Support position. My hope is to use my F keys more often and write fewer emails. This is my old base layer, still easily accessible, as I'm not used to having F key's on my top row quite yet.
 
 ## Symbols Layer
 

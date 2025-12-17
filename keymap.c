@@ -3,7 +3,6 @@
 
 enum {
   BASE = 0,
-  OLD_BASE,
   SYMBL,
   MEDIA,
   MKDWN,
@@ -99,56 +98,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     MD_LINK,          KC_Y,     KC_U,     KC_I,     KC_O,          KC_P,             KC_BSLS,
                       KC_H,     KC_J, ALT_T(KC_K),  LGUI_T(KC_L), KC_SCLN,  ALL_T(KC_QUOTE),
     TD(CT_RBP),       KC_N,     KC_M,     KC_COMMA, ALT_T(KC_DOT), CTL_T(KC_SLASH),  SCMD_T(_______),
-                LSFT(KC_MINUS), TG(MEDIA), DBLE_ZER0, DBLE_ZER0,   TO(OLD_BASE),
+                LSFT(KC_MINUS), TG(MEDIA), DBLE_ZER0, DBLE_ZER0,   _______,
     L_ID_0,         KC_ESCAPE,
     LGUI(KC_Z),
     LT(MEDIA,KC_LCTL),  LT(SYMBL,KC_ENTER),  LT(ARROWS,KC_SPACE)),
 
-    /* Keymap 1: OLD Base layer
-    * ,--------------------------------------------------.           ,--------------------------------------------------.
-    * |   =    |   1  |   2  |   3  |   4  |   5  | []() |           |      |   6  |   7  |   8  |   9  |   0  |   -    |
-    * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-    * | Tab    |   Q  |   W  |   E  |   R  |   T  | "> " |           | []() |   Y  |   U  |   I  |   O  |   P  |   \    |
-    * |--------+------+------+------+------+------|      |           | SCRN |------+------+------+------+------+--------|
-    * | Hyper  |   A  |S /CMD|   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |L /CMD| ; /L2| '/Hyper|
-    * |--------+------+------+------+------+------|   (  |           |   )  |------+------+------+------+------+--------|
-    * |Shft Tab|Z/Ctrl|X/Alt |   C  |   V  |   B  | [  { |           | ]  } |   N  |   M  |   ,  | ./Alt|//Ctrl|CMD+SHFT|
-    * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-    *   |  `   |Zendsk|RBMINE|CMD+S | ToDo |                                       |   _  |      |  00  |  00  |ToBase|
-    *   `----------------------------------'                                       `----------------------------------'
-    *                                        ,-------------.       ,--------------.
-    *                                        | Esc  | Home |       |Layer?| Esc   |
-    *                                 ,------|------|------|       |------+-------+------.
-    *                                 |      |      | End  |       | Undo |       |      |
-    *                                 |Shift |Backsp|------|       |------| Return|Space/|
-    *                                 | OSM  | /L5  | DEL  |       | Ctrl | /LT1  |Arrows|
-    *                                 `--------------------'       `---------------------'
-    *
-    *Copy/Cut key copies on tap, cut's on two taps.
-    */
-
-    [OLD_BASE] = LAYOUT_ergodox(
-      //left hand
-      KC_EQUAL,           KC_1,     KC_2,    KC_3,        KC_4,     KC_5,     M_LINK,
-      KC_TAB,             KC_Q,     KC_W,    KC_E,        KC_R,     KC_T,     M_GREATER,
-      OSM(MOD_HYPR),      KC_A,  S_CMD_S, D_CMD_OPT, LT(MKDWN,KC_F),KC_G,
-      LSFT(KC_TAB), CTL_T(KC_Z), ALT_T(KC_X),  KC_C,      KC_V,     KC_B,     TD(CT_LBP),
-                 KC_GRAVE, ZENDESK, RUBYMINE, LGUI(KC_S), TODO,
-                                                          KC_ESCAPE, KC_HOME,
-                                                                     KC_END,
-                                    OSM(MOD_LSFT), LT(NUM,KC_BSPC),  LT(MKDWN,KC_DELETE),
-
-      //right hand
-      _______,          KC_6,     KC_7,     KC_8,     KC_9,          KC_0,             KC_MINUS,
-      MD_LINK,          KC_Y,     KC_U,     KC_I,     KC_O,          KC_P,             KC_BSLS,
-                        KC_H,     KC_J,     KC_K,     LGUI_T(KC_L),  LT(MEDIA,KC_SCLN),  ALL_T(KC_QUOTE),
-      TD(CT_RBP),       KC_N,     KC_M,     KC_COMMA, ALT_T(KC_DOT), CTL_T(KC_SLASH),  SCMD_T(_______),
-                  LSFT(KC_MINUS), _______,  DBLE_ZER0, DBLE_ZER0,   TO(BASE),
-      L_ID_0,         KC_ESCAPE,
-      LGUI(KC_Z),
-      LT(MEDIA,KC_LCTL),  LT(SYMBL,KC_ENTER),  LT(ARROWS,KC_SPACE)),
-
-    /* Keymap 2: Symbol
+    /* Keymap 1: Symbol
      * ,--------------------------------------------------.           ,--------------------------------------------------.
      * |        |  1   |   2  |   3  |   4  |   5  | []() |           |      |   6  |  7   |  8   |   9  |   0  |   -    |
      * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
