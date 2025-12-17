@@ -1,5 +1,3 @@
-![Base](https://meagerfindings.com/assets/img/ergodox/base.png)
-
 # Meagerfinding's ErgoDox Layout
 
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
@@ -9,8 +7,6 @@
 - [Features](#features)
 	- [Tap/Hold Macro Keys](#taphold-macro-keys)
 	- [TapDance Keys](#tapdance-keys)
-- [Base Layer](#base-layer)
-	- [Things to note:](#things-to-note)
 - [Symbols Layer](#symbols-layer)
 - [Mouse & Media Keys Layer](#mouse-media-keys-layer)
 - [Markdown Layer](#markdown-layer)
@@ -49,23 +45,7 @@ Many features in this layout are either directly inspired by or are adaptations 
 * One tap on `Snagit` key = sends `Ctrl + Shift + C` which is Snagit's selector and two taps on `Snagit` key = `Cmd + Shift + Opt + 4`, OS X cropping screenshot that is copied to the clipboard only.
 * Tapping the `[{(`/`)}]` keys once yields `[` or `{` when the shift key is engaged, tapping them twice yields `(`.
 
-## Base Layer
-
-![Base](https://matgreten.dev/images/ergodox/base.png)
-
-The base layer retains the alphas from the QWERTY layout without any modifications.
-
-### Things to note:
-
-- The shift key is a One Shot Modifier key, meaning shift is not submitted when the key is tapped, instead, it only submits when you either tap it again, or on the next key press.
-  - There is no CAPSLOCK key designated as it is pretty comfortable to simply hold down shift in this layout and continue typing.
-- All layers are accessed by holding a key to reach them. For the most part, the key that toggles a layer, will be on the opposite hand that will be typing with that layer.
-   - For example: the symbols layer is reached by holding down the enter key with your right thumb, and most of the symbols are located on the left hand board.
-
-
 ## Symbols Layer
-
-![Symbols](https://matgreten.dev/images/ergodox/symbols.png)
 
 Holding down the `enter` key with your right thumb toggles the symbol layer.
 
@@ -103,19 +83,13 @@ The right hand has media controls under the homerow for quick muting/volume cont
 
 ## Markdown Layer
 
-![Markdown](https://matgreten.dev/images/ergodox/markdown.png)
-
 This layer places most common markdown symbols under the right hand. You can reach this layer by holding down the `F` key on your left hand.
 
 ## Arrow/Movements Layer
 
-![Movement](https://matgreten.dev/images/ergodox/movement_arrows.png)
-
 Toggled by holding down the space key with the right thumb. This isn't vim like movement, nope, it's `WASD` but over one column. So I guess it's actually `ESDF` on the left hand and `IJKL` on the right hand to better line up with the columns offset/staggered columns on the Dox.
 
 ## Numpad Layer
-
-![Numpad](https://matgreten.dev/images/ergodox/numpad.png)
 
 My right hand is pretty comfortable with tenkey number input so this is easily accessible by holding down backspace with the left thumb.
 
