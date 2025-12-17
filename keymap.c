@@ -178,7 +178,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //right hand
     XKCD,       _______,       _______,         _______,         _______,    _______,    KC_F15,
     _______,    _______,       _______,         _______,         _______,    _______,    KC_F14,
-                _______, KC_AUDIO_MUTE,     KC_AUDIO_VOL_DOWN,       KC_AUDIO_VOL_UP,    _______,    KC_MEDIA_PLAY_PAUSE,
+                _______,       _______,   KC_AUDIO_VOL_DOWN,       KC_AUDIO_VOL_UP,    KC_AUDIO_MUTE,    KC_MEDIA_PLAY_PAUSE,
    _______,     _______,       _______,   KC_MEDIA_PREV_TRACK,   KC_MEDIA_NEXT_TRACK,    _______,    XXXXXXX,
                                _______,         _______,         _______,    _______,    _______,
     L_ID_2,     _______,

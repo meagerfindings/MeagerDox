@@ -73,11 +73,31 @@ I've placed my most used symbols under the homerow. Granted, right now I mainly 
 
 ## Mouse & Media Keys Layer
 
-![Mouse & Media](https://meagerfindings.com/assets/img/ergodox/mouse_media.png)
+```
+    Left Hand                              Right Hand
+    ,--------------------------------------------------.           ,--------------------------------------------------.
+    |        |      |      |CMD→ |      |      |      |           | XKCD |      |      |      |      |      |  F15   |
+    |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+    |        |      |Whl Up| MsUp |Whl Dn|      |      |           |      |      |      |      |      |      |  F14   |
+    |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+    |        |Ctl L |MsLeft|MsDown|MsRght|Ctl R |------|           |------|      | Mute | Vol- | Vol+ |      | Play   |
+    |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+    |        |      |WHL L |CMD← |WHL R |      |      |           |      |      |      | Prev | Next |      |        |
+    `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+      |      |      |      |      |      |                                       | Mute |      |      |      |      |
+      `----------------------------------'                                       `----------------------------------'
+                                         ,-------------.       ,-------------.
+                                         |      |      |       |LAYER?|      |
+                                  ,------|------|------|       |------+------+------.
+                                  | Left |Right |      |       |      |Copy/ | Paste|
+                                  | Click|Click |------|       |------| cut  |/Paste|
+                                  |      |      |      |       |      |      |special|
+                                  `--------------------'       `--------------------'
+```
 
-Holding down the `:` key on with your right pinky toggles the mouse and media layer. Your left hand controls the mouse directions just in a similar fashion to the keys used in the [movement layer](#arrowmovements-layer).
+Holding down the `J` key (with left hand modifier access) toggles the mouse and media layer. Your left hand controls the mouse directions using familiar ESDF-like movement.
 
-The right hand has a media controls under the homerow for quick muting/pausing.
+The right hand has media controls under the homerow for quick muting/volume control/play.
 
 * `XKCD #1319` Key that ironically partially-automates accessing the link to [XKCD #1319](https://xkcd.com/1319/).
 
