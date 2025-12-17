@@ -344,12 +344,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         key_timer = timer_read();
       } else {
         if (timer_elapsed(key_timer) > 150) {
-          SEND_STRING ("([Video](");
+          SEND_STRING ("([](");
+          SEND_STRING(SS_LGUI("v"));
+          SEND_STRING("))");
         } else {
-          SEND_STRING ("([Screenshot](");
+          SEND_STRING(SS_LSFT(SS_LGUI("5")));
         }
-        SEND_STRING(SS_LGUI("v"));
-        SEND_STRING("))");
       }
       break;
 
