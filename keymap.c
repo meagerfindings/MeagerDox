@@ -34,6 +34,7 @@ enum custom_keycodes {
   M_LINK,
   M_GREATER,
   NO_REPEAT_SCLN,
+  SCRNSHOT_CLIP,
   TD_COPY_CUT = 6,
   TD_B_L_SEL = 10,
   CT_LBP = 11,
@@ -137,7 +138,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                            _______,     _______,   _______,
 
     //right hand
-   _______,          KC_6,        KC_7,         KC_8,         KC_9,        KC_0,   KC_MINUS,
+    SCRNSHOT_CLIP,    KC_6,        KC_7,         KC_8,         KC_9,        KC_0,   KC_MINUS,
     _______,      _______,     _______,      KC_PAST,      _______,     _______,    _______,
                   KC_MINUS,    KC_LBRC,      KC_RBRC,      KC_LPRN,     KC_RPRN,    _______,
     _______,      _______,     _______,      _______,      _______,     _______,    _______,
@@ -484,6 +485,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case NO_REPEAT_SCLN:
       if (record->event.pressed) {
         SEND_STRING(";");
+      }
+      return false;
+    case SCRNSHOT_CLIP:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LSFT(SS_LGUI("5")));
       }
       return false;
     }
