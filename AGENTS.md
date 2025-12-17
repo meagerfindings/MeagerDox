@@ -52,6 +52,29 @@ qmk flash -kb ergodox_ez -km meagerfindings
 qmk doctor
 ```
 
+## ⚠️ Critical: File Sync Workflow
+
+**The MeagerDox repo and QMK repo are separate!** Changes made here do NOT automatically sync to the QMK repo.
+
+### Before Flashing
+
+Always copy files from MeagerDox to QMK before compiling/flashing:
+
+```bash
+# From MeagerDox directory
+cp keymap.c config.h rules.mk ~/git/qmk/keyboards/ergodox_ez/keymaps/meagerfindings/
+
+# Then compile/flash
+qmk flash -kb ergodox_ez -km meagerfindings
+```
+
+### Why This Matters
+
+- **MeagerDox repo** (`/Users/mat/git/MeagerDox`): Source of truth, version controlled
+- **QMK repo** (`~/git/qmk/keyboards/ergodox_ez/keymaps/meagerfindings/`): Where compilation happens
+
+If you skip the copy step, QMK will compile the old files and your changes won't appear on the keyboard.
+
 ## Flashing Process
 
 1. Run `qmk flash -kb ergodox_ez -km meagerfindings`
