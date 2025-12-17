@@ -169,10 +169,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [MEDIA] = LAYOUT_ergodox(
     //left hand
-    _______,    _______,         _______,         _______,         _______,         _______,         _______,
+    _______,    _______,         _______,         LGUI(KC_RIGHT),         _______,         _______,         _______,
     _______,    _______,         KC_MS_WH_UP,     KC_MS_UP,        KC_MS_WH_DOWN,   _______,         _______,
     _______,    LCTL(KC_LEFT),   KC_MS_LEFT,      KC_MS_DOWN,      KC_MS_RIGHT,     RCTL(KC_RIGHT),
-    XXXXXXX,    _______,         KC_MS_WH_LEFT,   _______,         KC_MS_WH_RIGHT,  _______,         _______,
+    XXXXXXX,    _______,         KC_MS_WH_LEFT,   LGUI(KC_LEFT),   KC_MS_WH_RIGHT,  _______,         _______,
                 _______,         _______,         _______,         _______,         _______,
                                                                                     _______,         _______,
                                                                                                      _______,
