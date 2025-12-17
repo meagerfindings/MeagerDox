@@ -33,6 +33,7 @@ enum custom_keycodes {
   H_FIVE,
   M_LINK,
   M_GREATER,
+  NO_REPEAT_SCLN,
   TD_COPY_CUT = 6,
   TD_B_L_SEL = 10,
   CT_LBP = 11,
@@ -96,7 +97,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //right hand
     KC_F7,           KC_F8,     KC_F9,    KC_F10,   KC_F11,        KC_F12,           KC_MINUS,
     MD_LINK,          KC_Y,     KC_U,     KC_I,     KC_O,          KC_P,             KC_BSLS,
-                      KC_H,     LT(MEDIA,KC_J), ALT_T(KC_K),  LGUI_T(KC_L), KC_SCLN,  ALL_T(KC_QUOTE),
+                      KC_H,     LT(MEDIA,KC_J), ALT_T(KC_K),  LGUI_T(KC_L), NO_REPEAT_SCLN,  ALL_T(KC_QUOTE),
     TD(CT_RBP),       KC_N,     KC_M,     KC_COMMA, ALT_T(KC_DOT), CTL_T(KC_SLASH),  SCMD_T(_______),
                 LSFT(KC_MINUS), TG(MEDIA), TD(TD_COPY_CUT), PAST_PS,   _______,
     L_ID_0,         KC_ESCAPE,
@@ -480,6 +481,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           SEND_STRING ("> ");
       }
       break;
+    case NO_REPEAT_SCLN:
+      if (record->event.pressed) {
+        register_code(KC_SCLN);
+      } else {
+        unregister_code(KC_SCLN);
+      }
+      return false;
     }
   return true;
 };
