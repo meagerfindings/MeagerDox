@@ -483,9 +483,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     case NO_REPEAT_SCLN:
       if (record->event.pressed) {
-        register_code(KC_SCLN);
-      } else {
-        unregister_code(KC_SCLN);
+        SEND_STRING(";");
       }
       return false;
     }
