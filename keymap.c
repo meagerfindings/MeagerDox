@@ -344,9 +344,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         key_timer = timer_read();
       } else {
         if (timer_elapsed(key_timer) > 150) {
-          SEND_STRING ("([](");
+          SEND_STRING("[](");
           SEND_STRING(SS_LGUI("v"));
-          SEND_STRING("))");
+          SEND_STRING(")");
+          SEND_STRING(SS_TAP(X_HOME));
+          SEND_STRING(SS_TAP(X_RIGHT));
         } else {
           SEND_STRING(SS_LSFT(SS_LGUI("5")));
         }
