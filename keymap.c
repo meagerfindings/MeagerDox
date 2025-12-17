@@ -66,7 +66,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   * |--------+------+------+------+------+------|   (  |           |   )  |------+------+------+------+------+--------|
   * |Shft Tab|Z/Ctrl|X/Alt |   C  |   V  |   B  | [  { |           | ]  } |   N  |   M  |   ,  | ./Alt|//Ctrl|CMD+SHFT|
   * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-  *   |  `   |      |      |CMD+S |      |                                       |   _  | MEDIA| CP/CT|Paste |      |
+  *   |  `   |      |      |CMD+S | MEDIA|                                       |   _  | MEDIA| CP/CT|Paste |      |
   *   `----------------------------------'                                       `----------------------------------'
   *                                        ,-------------.       ,--------------.
   *                                        | Esc  | Home |       |Layer?| Esc   |
@@ -85,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,             KC_Q,     KC_W,        KC_E,        KC_R,       KC_T,     M_GREATER,
     OSM(MOD_HYPR),      KC_A,  S_CMD_S,    ALT_T(KC_D), LT(MKDWN,KC_F), KC_G,
     LSFT(KC_TAB), CTL_T(KC_Z), ALT_T(KC_X),    KC_C,        KC_V,       KC_B,     TD(CT_LBP),
-               KC_GRAVE, _______, _______,   LGUI(KC_S),   _______,
+               KC_GRAVE, _______, _______,   LGUI(KC_S),   TG(MEDIA),
                                                           KC_ESCAPE,    KC_HOME,
                                                                         KC_END,
                                   OSM(MOD_LSFT), LT(NUM,KC_BSPC),     LT(MKDWN,KC_DELETE),
