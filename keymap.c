@@ -43,7 +43,6 @@ enum custom_keycodes {
 
 //Redefine Key Names for Readaibilty
 #define XXXXXXX KC_NO
-#define SCRN_CLIPB LCTL(LGUI(LSFT(KC_4)))
 #define CHRM_L LALT(LGUI(KC_LEFT)) //Move left one tab in Chrome
 #define CHRM_R LALT(LGUI(KC_RIGHT)) //Move right one tab in Chrome
 #define S_CMD_S LGUI_T(KC_S) //`S` when typing `CMD` when held
@@ -224,7 +223,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                 _______,     _______, _______,
 
    //right hand
-   SCRN_CLIPB,       _______,       _______,       _______,       _______,       _______,       _______,
+    SCRNSHOT_CLIP,    _______,       _______,       _______,       _______,       _______,       _______,
    _______,          _______,   TRPLE_GRAVE,     DBLE_ASTR,LSFT(KC_MINUS),      KC_GRAVE,       _______,
                     KC_MINUS,       KC_LBRC,       KC_RBRC,       KC_LPRN,       KC_RPRN,       _______,
    _______,            H_ONE,         H_TWO,       H_THREE,        H_FOUR,        H_FIVE,       _______,
@@ -491,7 +490,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
     case SCRNSHOT_CLIP:
       if (record->event.pressed) {
-        SEND_STRING(SS_LSFT(SS_LGUI("5")));
+        SEND_STRING(SS_LCTL(SS_LSFT(SS_LGUI("4"))));
       }
       return false;
     }
